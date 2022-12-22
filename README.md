@@ -29,4 +29,22 @@ Durante la cursada tuvimos un ejemplo base, como se propone resolver el tp en ot
 En este documento se explica como se llevo a cabo este ejemplo base.
 [Base](puntos/base.md)
 
+```
+1. Utilizando como base el programa ejemplo1 de gRPC:
+Mostrar experimentos donde se produzcan errores de conectividad del lado del
+cliente y del lado del servidor.
+```
+```
+a) Si es necesario realice cambios mínimos para, por ejemplo, incluir exit(), de
+forma tal que no se reciban comunicaciones o no haya receptor para las
+comunicaciones.
+```
 
+[Ejercicio 1A](puntos/ej1_a.md)
+
+
+```
+c) Reducir el deadline de las llamadas gRPC a un 10% menos del promedio
+encontrado anteriormente. Mostrar y explicar el resultado para 10 llamadas.
+``` 
+[Ejercicio 1C](puntos/ej1_c.md)

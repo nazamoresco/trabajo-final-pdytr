@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.email";
+option java_outer_classname = "EmailProto";
+option objc_class_prefix = "E";
+
+package email;
+
+// The greeting service definition.
+service Emailer {
+  // Sends a greeting
+  rpc SendEmail (EmailRequest) returns (EmailReply) {}
+}
+
+// The request message containing the user's name.
+message EmailRequest {
+  string title = 1;
+  string body = 2;
+}
+
+// The response message containing the greetings
+message EmailReply {
+  bool success = 1;
+  string message = 2;
+}
