@@ -35,3 +35,4 @@ En este documento se explica como se llevo a cabo este ejemplo base.
 1. [Ejercicio 1A - Errores de conectividad](puntos/ej1_a.md)
 2. [Ejercicio 1B - Deadline](puntos/ej1_b.md)
 3. [Ejercicio 1C - Promedio y deadlines](puntos/ej1_c.md)
+4. [Ejercicio 2 - Tipos de API](puntos/ej_2.md)
