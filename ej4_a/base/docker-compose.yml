@@ -4,14 +4,14 @@ services:
     build:
       context: .
       dockerfile: Server
-    container_name: ej1_b_server
+    container_name: base_server
     ports:
       - 50051:50051
   client:
     build:
       context: .
       dockerfile: Client
-    container_name: ej1_b_client
+    container_name: base_client
     network_mode: host
     depends_on: 
       - server

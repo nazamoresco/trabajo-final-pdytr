@@ -6,7 +6,7 @@ require 'grpc'
 require 'email_services_pb'
 
 hostname = 'localhost:50051'
-stub = Email::Emailer::Stub.new(hostname, :this_channel_is_insecure, timeout: 2)
+stub = Email::Emailer::Stub.new(hostname, :this_channel_is_insecure)
 email = Email::EmailRequest.new(title: "Greetings", body: "Greetings from WC champion Argentina.")
 email_response = stub.send_email(email)
 
