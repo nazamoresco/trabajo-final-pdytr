@@ -106,3 +106,100 @@ File.open("files/image_copy.jpg", "a") do |file|
   end
 end
 ```
+
+## Escritura
+
+Para la escritura se utilizó un esquema de streaming bidireccional, esto se debe a que el cliente debe ir stremeando el archivo y a su vez, el servidor debe ir devolviendo la cantidad de bytes que escribió. El cliente envía los bytes del archivo más el nombre del archivo a escribir y la cantidad de bytes enviados, el servidor responde con la cantidad de bytes escritos.
+
+```proto
+service FileTransferService {
+  rpc write(stream FileWriteRequest) returns (stream FileWriteResponse) {}
+}
+
+message FileWriteRequest {
+  string fileName = 1;
+  int32 bytesQuantity = 2;
+  bytes contentBytes = 3;
+}
+ 
+message FileWriteResponse {
+  int32 bytesQuantity = 1;
+}
+```
+
+En el cliente invocamos a una clase `FileReader` que se encargará construir las partes a enviar al servidor y un bloque que reacciona al stream del servidor. 
+```ruby
+stub.write(
+  FileReader.new("image.jpg").each_item
+) do |response|
+  puts "Se han escrito #{response.bytesQuantity}"
+end
+```
+
+El `FileReader` del cliente es similar al del servidor con la diferencia que se envian del cliente al servidor y no del servidor al cliente, y que se tiene que tener en cuenta los caracteres del nombre del archivo para el calculo del maximo de bytes para la comunicacion.
+```ruby
+class FileReader
+  MAX_BYTES = 4_194_308
+  
+  def initialize(file_name)
+    @file_name = file_name
+  end
+
+  def each_item
+    return enum_for(:each_item) unless block_given?
+
+    file = File.open("files/" + @file_name, "r")
+
+    max_bytes = MAX_BYTES - 4 - @file_name.length
+
+    total_bytes_to_read = file.size
+
+    complete_chunks = total_bytes_to_read / max_bytes
+    remaining_chunk_bytes = total_bytes_to_read % max_bytes
+
+    bytes_chunks = ([max_bytes] * complete_chunks) 
+    bytes_chunks << remaining_chunk_bytes if remaining_chunk_bytes != 0
+    
+    bytes_chunks.each do |bytes_to_read|
+      yield FileService::FileWriteRequest.new(
+        fileName: @file_name,
+        contentBytes: file.read(bytes_to_read),
+        bytesQuantity: bytes_to_read
+      )
+    end
+  end
+end
+```
+
+
+En el servidor se invoca a la clase `FileWriter` que se encarga de escribir el archivo enviado por el cliente.
+```ruby
+def write(file_parts)
+  FileWriter.new(file_parts).each_item
+end
+```
+
+`FileWriter` es sencillo por cada particion recibida, la escribe y devuelve al cliente los bytes escritos.
+```ruby
+class FileWriter
+  def initialize(file_parts)
+    @file_parts = file_parts
+  end
+
+  def each_item
+    return enum_for(:each_item) unless block_given?
+    begin
+      @file_parts.each do |file_part|
+        file = File.open("files/#{file_part.fileName}", "a")
+        file << file_part.contentBytes
+
+        yield FileService::FileWriteResponse.new(
+          bytesQuantity: file_part.bytesQuantity
+        )
+      end
+    rescue StandardError => e
+      fail e # signal completion via an error
+    end
+  end
+end
+```

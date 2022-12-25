@@ -4,13 +4,18 @@ $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
 require 'grpc'
 require 'file_service_services_pb'
-require_relative 'file_reader'
+require_relative 'server/file_reader'
+require_relative 'server/file_writer'
 
 class FileServer < FileService::FileTransferService::Service
   MAX_BYTES = 4_194_304
 
   def read(file_read_req, _unused_call)
-    return FileReader.new(file_read_req, max_bytes: MAX_BYTES).each
+    FileReader.new(file_read_req, max_bytes: MAX_BYTES).each
+  end
+
+  def write(file_parts)
+    FileWriter.new(file_parts).each_item
   end
 end
 

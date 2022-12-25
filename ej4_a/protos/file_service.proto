@@ -10,6 +10,7 @@ package file_service;
 
 service FileTransferService {
   rpc read(FileReadRequest) returns (stream FileReadResponse) {}
+  rpc write(stream FileWriteRequest) returns (stream FileWriteResponse) {}
 }
 
 message FileReadRequest {
@@ -23,3 +24,12 @@ message FileReadResponse {
   bytes contentBytes = 2;
 }
 
+message FileWriteRequest {
+  string fileName = 1;
+  int32 bytesQuantity = 2;
+  bytes contentBytes = 3;
+}
+ 
+message FileWriteResponse {
+  int32 bytesQuantity = 1;
+}
