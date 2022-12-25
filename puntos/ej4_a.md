@@ -10,10 +10,9 @@ a) Defina e implemente con gRPC un servidor. Documente todas las decisiones toma
 
 ## Lectura
 
-Para la lectura, se decidió implementar un servicio Server Streaming GRPC, ya que de está forma el servidor puede mandarle el archivo particionado al cliente a través del stream.
+Para la lectura, se decidió implementar un servicio Server Streaming GRPC, ya que de está forma el servidor puede enviarle el archivo particionado al cliente a través de un stream.
 
-Se definicio el servicio de la siguiente forma:
-
+Se definio el servicio de la siguiente forma:
 ```proto
 message FileReadRequest {
   string fileName = 1;
@@ -32,10 +31,9 @@ service FileTransferService {
 }
 ```
 
+A continuacion como se construyo el server:
 
-Veamos a continuacion como se construyo el server:
-
-Se obtuvo que el limite para la comunicaciones son 4.194.308 bytes.
+Primero se obtuvó que el limite para la comunicaciones son 4.194.308 bytes para ruby.
 ```
 {UNKNOWN:Error received from peer localhost:50051 {created_time:"2022-12-24T18:06:36.556774716+00:00", grpc_status:8, grpc_message:"Received message larger than max (500000008 vs. 4194304)"}}
 ```
@@ -51,13 +49,13 @@ class FileServer < FileService::FileTransferService::Service
 end
 ```
 
-La clase se encarga de construir las distintas particiones leidas del archivo.
+La clase `FileReader` se encarga de construir las distintas particiones leidas del archivo.
 
-En el metodo `file_parts` se observa la logica para el leido: 
+En el metodo `each` se observa la logica para el leido: 
 1. Se abre el archivo bajo la carpeta `/files` (para evitar leer archivos del codigo)
 2. Se mueve el puntero del archivo segun el offset.
 3. Se calcula la cantidad de bytes a leer y se calcula el tamaño de los distintos *chunks* resultantes.
-4. Se lee las particiones construyendo los resultados y se retorna.
+4. A medida que se lee las particiones se retornan al cliente con la instruccion `yield`
 ```ruby
 class FileReader
   # @param [Area] area
@@ -68,16 +66,6 @@ class FileReader
 
   def each
     return enum_for(:each) unless block_given?
-
-    file_parts.each do |location|
-      yield location
-    end
-  end
-
-  private
-
-  def file_parts
-    return @file_parts if defined?(@file_parts)
 
     file = File.open("files/" + @request.fileName, "r")
     file.seek(@request.fileOffset)
@@ -90,22 +78,19 @@ class FileReader
     bytes_chunks = ([@max_bytes] * complete_chunks) 
     bytes_chunks << remaining_chunk_bytes if remaining_chunk_bytes != 0
 
-    result = bytes_chunks.map do |bytes_to_read|
-      FileService::FileReadResponse.new(
+    bytes_chunks.each do |bytes_to_read|
+      yield FileService::FileReadResponse.new(
         contentBytes: file.read(bytes_to_read),
         bytesQuantity: bytes_to_read
       )
     end
-
-    @file_parts = result
-    @file_parts
   end
 end
 ```
 
 El codigo en el cliente es mas sencillo:
 
-Podemos observar como se hace el request, luego se abre un archivo copia, y por cada resultado se añade al archivo.
+Se puede observar como se hace el request, luego se abre un archivo copia y por cada resultado se añade al archivo.
 El resultado es una copia directa del archivo del servidor.
 ```ruby
 stub = FileService::FileTransferService::Stub.new(hostname, :this_channel_is_insecure)
