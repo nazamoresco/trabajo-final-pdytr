@@ -39,3 +39,5 @@ En este documento se explica como se llevo a cabo este ejemplo base.
 5. [Ejercicio 3 - Transparencia](puntos/ej3.md)
 6. [Ejercico 4A - Sistema de archivos](puntos/ej4_a.md)
 7. [Ejercicio 4B - Concurrencia](puntos/ej4_b.md)
+8. [Ejercicio 5A - Tiempo de respuesta](puntos/ej5_a.md)
+9. [Ejercicio 5B - Sockets](puntos/ej5_b.md)

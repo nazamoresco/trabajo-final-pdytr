@@ -1,0 +1,10 @@
+FROM ruby:3.0.0
+
+RUN mkdir /server
+WORKDIR /server
+
+COPY . /server
+
+EXPOSE 50051
+
+CMD ["ruby", "./emailer_server.rb"] 

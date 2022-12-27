@@ -74,4 +74,4 @@ client_1  | ERROR: 4:Deadline Exceeded. debug_error_string:{UNKNOWN:Deadline Exc
 
 Una conclusión posible  es que gRPC es estable en su tiempo de respuesta, por lo que el desvio de la media en el tiempo de respuesta es menor al 10% y es improbable que una request se termine antes de dicho tiempo.
 
-En parte estos resultados son causa de la relacion tiempo de procesamiento y tiempo de comunicacion, y que esto fue probado en un entorno local donde el tiempo de comunicacion es significativamente menor a un entorno de produccion.
+En parte estos resultados son causa de la relacion tiempo de procesamiento y tiempo de comunicacion, y que esto fue probado en un entorno local donde el tiempo de comunicacion es significativamente menor a un entorno de produccion, en distintos entornos de prueba los resultados pueden variar.

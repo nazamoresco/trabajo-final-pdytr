@@ -1,0 +1,10 @@
+FROM ruby:3.0.0
+
+RUN mkdir /client
+WORKDIR /client
+
+RUN gem install benchmark
+
+COPY . /client
+
+CMD ["ruby", "./emailer_client.rb"] 
