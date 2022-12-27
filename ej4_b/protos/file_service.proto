@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.file_service";
+option java_outer_classname = "FileServiceProto";
+option objc_class_prefix = "E";
+
+package file_service;
+
+
+service FileTransferService {
+  rpc read(FileReadRequest) returns (stream FileReadResponse) {}
+  rpc write(stream FileWriteRequest) returns (stream FileWriteResponse) {}
+}
+
+message FileReadRequest {
+  string fileName = 1;
+  int32 fileOffset = 2;
+  int32 bytesQuantity = 3;
+}
+
+message FileReadResponse {
+  int32 bytesQuantity = 1;
+  bytes contentBytes = 2;
+}
+
+message FileWriteRequest {
+  string fileName = 1;
+  int32 bytesQuantity = 2;
+  bytes contentBytes = 3;
+}
+ 
+message FileWriteResponse {
+  int32 bytesQuantity = 1;
+}

@@ -38,3 +38,4 @@ En este documento se explica como se llevo a cabo este ejemplo base.
 4. [Ejercicio 2 - Tipos de API](puntos/ej2.md)
 5. [Ejercicio 3 - Transparencia](puntos/ej3.md)
 6. [Ejercico 4A - Sistema de archivos](puntos/ej4_a.md)
+7. [Ejercicio 4B - Concurrencia](puntos/ej4_b.md)

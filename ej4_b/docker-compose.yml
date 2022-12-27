@@ -1,0 +1,25 @@
+version: "3"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Server
+    container_name: ej4_b_server
+    ports:
+      - 50051:50051
+  client_1:
+    build:
+      context: .
+      dockerfile: Client
+    container_name: ej4_b_client_1
+    network_mode: host
+    depends_on: 
+      - server
+  client_2:
+    build:
+      context: .
+      dockerfile: Client
+    container_name: ej4_b_client_2
+    network_mode: host
+    depends_on: 
+      - server
