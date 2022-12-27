@@ -13,7 +13,7 @@ Se agrego un codigo para simular trabajo:
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
-    1_0000_0000.times { "Checking other emails" }
+    100_000_000.times { "Checking other emails" }
 
     Email::EmailReply.new(success: true, message: "Your email was store successfully")
   end
