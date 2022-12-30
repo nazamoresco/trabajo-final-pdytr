@@ -22,6 +22,11 @@ La entrega final incluirá:
     * Explicacion del codigo
     * Conclusiones
 
+Crear 3 clientes para el partido Argentina - Francia.
+1. Un Comentarista que acceda a Argentina - Francia y comente el partido.
+2. Un Arbitro que acceda a Argentina - Francia y arbitre el partido.
+3. Un Oyente que acceda a Argentina - Francia y escuche el partido.
+
 ## Traduccion del TP3 a Ruby
 
 Durante la cursada tuvimos un ejemplo base, como se propone resolver el tp en otro lenguaje deberemos realizarlo nosotros mismos.
@@ -41,3 +46,8 @@ En este documento se explica como se llevo a cabo este ejemplo base.
 7. [Ejercicio 4B - Concurrencia](puntos/ej4_b.md)
 8. [Ejercicio 5A - Tiempo de respuesta](puntos/ej5_a.md)
 9. [Ejercicio 5B - Sockets](puntos/ej5_b.md)
+
+
+### Comparacion API REST vs gRPC
+
+En [este documento](puntos/comparacion.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST. 

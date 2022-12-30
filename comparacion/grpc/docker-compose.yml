@@ -4,14 +4,14 @@ services:
     build:
       context: .
       dockerfile: Server
-    container_name: ej1_a_3_server
+    container_name: comparacion_grpc_server
     ports:
       - 50051:50051
-  client:
+  oyente:
     build:
       context: .
-      dockerfile: Client
-    container_name: ej1_a_3_client
+      dockerfile: Oyente
+    container_name: comparacion_grpc_oyente
     network_mode: host
     depends_on: 
       - server
