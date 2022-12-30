@@ -11,6 +11,17 @@ class Server < Football::Football::Service
       matches: Dir["./partidos/*"].map { |match| match.gsub(/\.\/partidos\//i, "") }.sort
     )
   end
+
+  def comment_match(comment_reqs)
+    file = nil
+    comment_reqs.each_remote_read do |comment_req|
+      file ||= File.open("partidos/#{comment_req.match}", "a") 
+      file << "#{comment_req.comment}\n" 
+    end
+    
+    file.close
+    Football::CommentMatchResponse.new
+  end
 end
 
 server = GRPC::RpcServer.new

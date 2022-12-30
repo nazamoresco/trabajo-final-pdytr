@@ -9,8 +9,18 @@ package football;
 
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
+  rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
 }
 
+// Comment match
+message CommentMatchRequest {
+  string match = 1;
+  string comment = 2;
+}
+
+message CommentMatchResponse {}
+
+// List matches
 message ListMatchesRequest {}
 
 message ListMatchesResponse {
