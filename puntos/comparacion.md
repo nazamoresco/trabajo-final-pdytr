@@ -312,3 +312,66 @@ services:
     depends_on: 
       - comentarista
 ```
+
+## Escuchar partidos
+
+Para este endpoint, se necesitó de un endpoint con server streaming.
+
+```proto
+service Football {
+  rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
+  rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
+  rpc ListenMatch(ListenMatchRequest) returns (stream ListenMatchResponse) {}
+}
+
+// Listen Match
+message ListenMatchRequest {
+  string match = 1;
+}
+
+message ListenMatchResponse {
+  string event = 1;
+}
+```
+
+El el oyente se realizó una pequeña modificacion luego de listar los partidos, selecciona el primero y hace un request para escucharlo.
+```ruby
+response = stub.list_matches Football::ListMatchesRequest.new
+my_match = response.matches.first
+
+call = stub.listen_match(Football::ListenMatchRequest.new(match: my_match))
+
+call.each do |event_res|
+  puts event_res.event
+end
+```
+
+En el servidor, se *stremea* desde la clase `MatchListener`
+```ruby
+class Server < Football::Football::Service
+  def listen_match(listen_req, _unused_call)
+    MatchListener.new(listen_req.match).each
+  end
+end
+```
+
+La clase `MatchListener` accede al archivo correspondiente al partido y stremea los eventos en él al cliente.
+```ruby
+class MatchListener
+  def initialize(match)
+    @match = match
+  end
+
+  def each
+    return enum_for(:each) unless block_given?
+
+    file = File.open("partidos/#{@match}", "r")
+    file.each_line do |line|
+      yield Football::ListenMatchResponse.new(
+        event: line
+      )
+    end
+  end
+end
+```
+

@@ -10,6 +10,16 @@ package football;
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
   rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
+  rpc ListenMatch(ListenMatchRequest) returns (stream ListenMatchResponse) {}
+}
+
+// Listen Match
+message ListenMatchRequest {
+  string match = 1;
+}
+
+message ListenMatchResponse {
+  string event = 1;
 }
 
 // Comment match

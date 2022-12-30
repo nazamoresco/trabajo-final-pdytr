@@ -9,5 +9,10 @@ require 'football_services_pb'
 stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
 
 response = stub.list_matches Football::ListMatchesRequest.new
+my_match = response.matches.first
 
-puts response.matches
+call = stub.listen_match(Football::ListenMatchRequest.new(match: my_match))
+
+call.each do |event_res|
+  puts event_res.event
+end

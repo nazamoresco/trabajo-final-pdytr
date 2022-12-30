@@ -5,6 +5,24 @@ $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 require 'grpc'
 require 'football_services_pb'
 
+class MatchListener
+  def initialize(match)
+    @match = match
+  end
+
+  def each
+    return enum_for(:each) unless block_given?
+
+    file = File.open("partidos/#{@match}", "r")
+    file.each_line do |line|
+      yield Football::ListenMatchResponse.new(
+        event: line
+      )
+    end
+  end
+end
+
+
 class Server < Football::Football::Service
   def list_matches(email_req, _unused_call)
     Football::ListMatchesResponse.new(
@@ -21,6 +39,10 @@ class Server < Football::Football::Service
     
     file.close
     Football::CommentMatchResponse.new
+  end
+
+  def listen_match(listen_req, _unused_call)
+    MatchListener.new(listen_req.match).each
   end
 end
 
