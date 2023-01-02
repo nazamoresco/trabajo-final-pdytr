@@ -23,9 +23,9 @@ La entrega final incluirá:
     * Conclusiones
 
 Crear 3 clientes para el partido Argentina - Francia.
-1. Un Comentarista que acceda a Argentina - Francia y comente el partido.
+1. Un Commentator que acceda a Argentina - Francia y comente el partido.
 2. Un Arbitro que acceda a Argentina - Francia y arbitre el partido.
-3. Un Oyente que acceda a Argentina - Francia y escuche el partido.
+3. Un listener que acceda a Argentina - Francia y escuche el partido.
 
 ## Traduccion del TP3 a Ruby
 

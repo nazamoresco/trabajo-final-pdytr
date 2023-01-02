@@ -7,19 +7,19 @@ services:
     container_name: comparacion_grpc_server
     ports:
       - 50051:50051
-  comentarista:
+  commentator:
     build:
       context: .
-      dockerfile: Comentarista
+      dockerfile: Commentator
     container_name: comparacion_grpc_comentarista
     network_mode: host
     depends_on: 
       - server
-  oyente:
+  listener:
     build:
       context: .
-      dockerfile: Oyente
+      dockerfile: Listener
     container_name: comparacion_grpc_oyente
     network_mode: host
     depends_on: 
-      - comentarista
+      - commentator

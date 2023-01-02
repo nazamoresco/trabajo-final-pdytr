@@ -11,8 +11,8 @@ RUN chmod -R o-w /usr/local/bundle
 RUN apt update
 RUN apt install ruby-grpc-tools -y 
 
-COPY servidor /server/servidor
-COPY partidos /server/partidos
+COPY server /server/server
+COPY matches /server/matches
 COPY lib /server/lib
 COPY protos /server/protos
 
@@ -20,4 +20,4 @@ RUN grpc_tools_ruby_protoc ./protos/football.proto -I ./protos --grpc_out=lib --
 
 EXPOSE 50051
 
-CMD ["ruby", "./servidor/server.rb"] 
+CMD ["ruby", "./server/server.rb"] 

@@ -1,5 +1,5 @@
 this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir.gsub(/servidor/i, ""), 'lib')
+lib_dir = File.join(this_dir.gsub(/server/i, ""), 'lib')
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
 require 'grpc'
@@ -14,7 +14,7 @@ class MatchListener
     return enum_for(:each) unless block_given?
     
     real_time_match_listener = Enumerator.new do
-      lines = File.open("partidos/#{@match}", "r").each_line
+      lines = File.open("matches/#{@match}", "r").each_line
       already_read_bytes = 0
 
       loop do
@@ -27,7 +27,7 @@ class MatchListener
             already_read_bytes += next_line.length
           rescue StopIteration
             sleep(1) # Wait a second for new lines
-            file = File.open("partidos/#{@match}", "r")
+            file = File.open("matches/#{@match}", "r")
             file.seek(already_read_bytes)
             lines = file.each_line
             waits -= 1
@@ -58,7 +58,7 @@ end
 class Server < Football::Football::Service
   def list_matches(email_req, _unused_call)
     Football::ListMatchesResponse.new(
-      matches: Dir["./partidos/*"].map { |match| match.gsub(/\.\/partidos\//i, "") }.sort
+      matches: Dir["./matches/*"].map { |match| match.gsub(/\.\/matches\//i, "") }.sort
     )
   end
 
@@ -66,7 +66,7 @@ class Server < Football::Football::Service
     referee = Referee.new
 
     comment_reqs.each_remote_read do |comment_req|
-      file = File.open("partidos/#{comment_req.match}", "a") 
+      file = File.open("matches/#{comment_req.match}", "a") 
       file << "#{comment_req.comment}\n" 
 
       santion = referee.observe(comment_req.comment)

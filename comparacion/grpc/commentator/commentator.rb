@@ -1,11 +1,11 @@
 this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir.gsub(/comentarista/i, ""), 'lib')
+lib_dir = File.join(this_dir.gsub(/commentator/i, ""), 'lib')
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
 require 'grpc'
 require 'football_services_pb'
 
-class Comentarista
+class Commentator
   ACTIONS = ["barre", "regatea", "define", "pasa"]
   DIRECTIONS = ["izquierda", "derecha"]
   ACTED = ["arquero", "arco", "defensor", "delantero"]
@@ -24,7 +24,7 @@ class ComentaristaStreamer
   
   def initialize(match)
     @match = match
-    @comentarista = Comentarista.new(
+    @commentator = Commentator.new(
       local: match.split("-")[0],
       visitor: match.split("-")[1]
     )
@@ -34,9 +34,11 @@ class ComentaristaStreamer
     return enum_for(:each) unless block_given?
 
     100.times do
+      sleep(0.5)
+
       yield Football::CommentMatchRequest.new(
         match: @match,
-        comment: @comentarista.comment
+        comment: @commentator.comment
       )
     end
   end
