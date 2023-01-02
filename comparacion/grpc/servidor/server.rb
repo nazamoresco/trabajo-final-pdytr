@@ -12,13 +12,45 @@ class MatchListener
 
   def each
     return enum_for(:each) unless block_given?
+    
+    real_time_match_listener = Enumerator.new do
+      lines = File.open("partidos/#{@match}", "r").each_line
+      already_read_bytes = 0
 
-    file = File.open("partidos/#{@match}", "r")
-    file.each_line do |line|
-      yield Football::ListenMatchResponse.new(
-        event: line
-      )
+      loop do
+        next_line = nil
+        waits = 10
+        
+        while next_line.nil?
+          begin
+            next_line = lines.next
+            already_read_bytes += next_line.length
+          rescue StopIteration
+            sleep(1) # Wait a second for new lines
+            file = File.open("partidos/#{@match}", "r")
+            file.seek(already_read_bytes)
+            lines = file.each_line
+            waits -= 1
+
+            raise if waits == 0
+          end
+        end
+        
+        yield Football::ListenMatchResponse.new(
+          event: next_line
+        )
+      end
     end
+
+    real_time_match_listener.each { |result| yield result }
+  end
+end
+
+class Referee
+  def observe(event)
+    foul = event =~ /barre/i
+
+    foul ? "Falta" : nil
   end
 end
 
@@ -31,13 +63,18 @@ class Server < Football::Football::Service
   end
 
   def comment_match(comment_reqs)
-    file = nil
+    referee = Referee.new
+
     comment_reqs.each_remote_read do |comment_req|
-      file ||= File.open("partidos/#{comment_req.match}", "a") 
+      file = File.open("partidos/#{comment_req.match}", "a") 
       file << "#{comment_req.comment}\n" 
+
+      santion = referee.observe(comment_req.comment)
+      file << "#{santion}\n" unless santion.nil?
+      
+      file.close
     end
     
-    file.close
     Football::CommentMatchResponse.new
   end
 

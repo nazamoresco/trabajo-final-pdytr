@@ -8,7 +8,7 @@ El sistema tendrá dos modulos princpales el Comentarista y el Arbitro.
 
 El Comentarista es un cliente que se encarga de enviar al servidor todos los eventos en alta presicion que registra mediante las camaras de los telefonos de la tribuna y las camaras de los distintos medios periodisticos.
 
-El Arbitro es un cliente que escucha atentanmente al Comentarista, en caso de detectar una falta le enviara al servidor la sanción acorde y la derivara el mismo a un sistema externo (no será necesario implementarlo para el MVP).
+El Arbitro es un modulo que recide en el servidor y debe escuchar a los comentarios al Comentarista, en caso de detectar una falta lo debe guardar en el servidor la sanción acorde, donde podra ser escuchada por los clientes.
 
 Finalmente tambien existen los Oyentes, estos son usuarios humanos que escucharan los partidos relatados por el Comentarista y arbitrados por el Arbitro.
 
@@ -25,7 +25,7 @@ Se requiren las siguientes interacciones con el servidor:
    * El servidor devuelve un string que contiene los nombres de los partidos separados por punto y coma.
 2. Escuchar los partidos
    * El cliente envia un string que identifica al partido que quiere escuchar.
-   * El servidor streamea los arbitrajes y comentarios que suceden.
+   * El servidor streamea los arbitrajes y comentarios que suceden, y tambien debe notificar de la finalizacion de un partido.
    * En general, los Oyentes usaran este endpoint.
    * Comunicacion server-streaming.
 3. Comentar los partidos
@@ -33,9 +33,6 @@ Se requiren las siguientes interacciones con el servidor:
    * El servidor registra y distribuye a los demas oyentes.
    * En general los Comentaristas usaran este endpoint.
    * Comunicacion client-streaming. 
-4. Arbitrar los partidos
-   * El cliente envia al servidor el partido que quiere arbitrar y las potenciales sanciones.
-   * El servidor envia al cliente los comentarios del Comentarista.
 
 
 ## La implementancion de gRPC
@@ -181,21 +178,31 @@ message CommentMatchRequest {
 message CommentMatchResponse {}
 ```
 
-El servidor recibe los comentarios, abre el archivo correspondiente y lo appendea. Una vez que no existan mas comentarios cierra el archivo y cierra la comunicacion.
+El servidor realiza las siguientes tareas:
+* Recibe los comentarios y los agrega al archivo correspondiente.
+* Le envia al modulo `Referee` el comentario para que lo analice, y agrega una potencial sanción al archivo.
+
 ```ruby
 class Server < Football::Football::Service
   def comment_match(comment_reqs)
-    file = nil
+    referee = Referee.new
+
     comment_reqs.each_remote_read do |comment_req|
-      file ||= File.open("partidos/#{comment_req.match}", "a") 
+      file = File.open("partidos/#{comment_req.match}", "a") 
       file << "#{comment_req.comment}\n" 
+
+      santion = referee.observe(comment_req.comment)
+      file << "#{santion}\n" unless santion.nil?
+      
+      file.close
     end
-    
-    file.close
+
     Football::CommentMatchResponse.new
   end
 end
 ```
+
+El referee
 
 El cliente define una clase para la logica del comentario, no es interesante si el enforque es en gRPC, pero devuelve un comentario en el metodo `comment`.
 ```ruby
@@ -316,7 +323,7 @@ services:
 ## Escuchar partidos
 
 Para este endpoint, se necesitó de un endpoint con server streaming.
-
+Como se observa en la respuesta se incluirá si el partido ha finalizado.
 ```proto
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
@@ -331,6 +338,7 @@ message ListenMatchRequest {
 
 message ListenMatchResponse {
   string event = 1;
+  bool match_over = 2;
 }
 ```
 
@@ -343,6 +351,7 @@ call = stub.listen_match(Football::ListenMatchRequest.new(match: my_match))
 
 call.each do |event_res|
   puts event_res.event
+  break if event_res.match_over
 end
 ```
 
@@ -356,6 +365,7 @@ end
 ```
 
 La clase `MatchListener` accede al archivo correspondiente al partido y stremea los eventos en él al cliente.
+El enumerador que se contruyó es distintos a los de ejercicio anteriores, ya que no itera por datos, escucha a un archivo, por esta razon se explica en mayor detalle el metodo `each`.
 ```ruby
 class MatchListener
   def initialize(match)
@@ -364,14 +374,119 @@ class MatchListener
 
   def each
     return enum_for(:each) unless block_given?
+    
+    real_time_match_listener = Enumerator.new do
+      lines = File.open("partidos/#{@match}", "r").each_line
+      already_read_bytes = 0
 
-    file = File.open("partidos/#{@match}", "r")
-    file.each_line do |line|
-      yield Football::ListenMatchResponse.new(
-        event: line
-      )
+      loop do
+        next_line = nil
+        waits = 10
+        
+        while next_line.nil?
+          begin
+            next_line = lines.next
+            already_read_bytes += next_line.length
+          rescue StopIteration
+            sleep(1) # Wait a second for new lines
+            file = File.open("partidos/#{@match}", "r")
+            file.seek(already_read_bytes)
+            lines = file.each_line
+            waits -= 1
+
+            raise if waits == 0
+          end
+        end
+        
+        yield Football::ListenMatchResponse.new(
+          event: next_line,
+          match_over: false
+        )
+      rescue StopIteration
+        yield Football::ListenMatchResponse.new(
+          event: "GAME OVER",
+          match_over: true
+        )
+      end
     end
+
+    real_time_match_listener.each { |result| yield result }
   end
 end
 ```
 
+Normalmente un enumerador se ve asi en Ruby: 
+```ruby
+100.times
+datos.each
+file.each_line
+```
+
+Estas formas tienen en comun que se evalua los datos a recorrer antes de crear el enumerador.
+El rango numerico debe ser evaluado, los datos contruidos y el archivo abierto.
+Pero en esto problema se necesita acceder a nuevos datos que puede aparecer una vez evaluado nuestro enumerador.
+Por esto se utilizó este metodo: 
+
+```ruby
+  real_time_match_listener = Enumerator.new do
+    # inicializacion
+
+    loop do
+      # siguiente cosa a devolver
+    end
+  end
+```
+
+Lo que el lector debe enterder es que es una especie de enumerador "infinito", la lógica para cada nuevo elemento se encuentra en el bloque `loop` , cuenta con un estado definido en `inicializacion` y es posible finalizar la iteracion levantando una excepcion en `loop` (`StopIteration`).
+
+En la inicializacion se abre el archivo por primera vez y se crea una variable para hacer un seguimientos de los bytes leidos.
+
+```ruby
+  real_time_match_listener = Enumerator.new do
+    lines = File.open("partidos/#{@match}", "r").each_line
+    already_read_bytes = 0
+
+    loop do
+      # siguiente cosa a devolver
+    end
+  end
+```
+
+Finalmente se generó la logica para construir el siguiente elemento.
+Puntos a observar:
+* Si existen aun lineas para leer del archivos abierto, se lee y actualiza los bytes leidos.
+* Si no existen lineas para leer:
+  * Se espera 1 segundo.
+  * Se abre nuevamente el archivo para acceder a nuevo contenido, pero se mueve el puntero del archivo a la ultima posicion leida.
+  * Se realizara 10 veces esta logica, en caso de no encontrar nuevo contenido, se considerá finalizado el partido.
+
+```ruby
+  real_time_match_listener = Enumerator.new do
+    lines = File.open("partidos/#{@match}", "r").each_line
+    already_read_bytes = 0
+
+    loop do
+      next_line = nil
+      waits = 10
+      
+      while next_line.nil?
+        begin
+          next_line = lines.next
+          already_read_bytes += next_line.length
+        rescue StopIteration
+          sleep(1) # Wait a second for new lines
+          file = File.open("partidos/#{@match}", "r")
+          file.seek(already_read_bytes)
+          lines = file.each_line
+          waits -= 1
+
+          raise if waits == 0
+        end
+      end
+      
+      yield Football::ListenMatchResponse.new(
+        event: next_line
+      )
+    end
+  end
+```
