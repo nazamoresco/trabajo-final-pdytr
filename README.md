@@ -32,22 +32,22 @@ Crear 3 clientes para el partido Argentina - Francia.
 Durante la cursada tuvimos un ejemplo base, como se propone resolver el tp en otro lenguaje deberemos realizarlo nosotros mismos.
 
 En este documento se explica como se llevo a cabo este ejemplo base.
-[Base](puntos/base.md)
+[Base](docs/tp3/base.md)
 
 
 ###  Ejercicios
 
-1. [Ejercicio 1A - Errores de conectividad](puntos/ej1_a.md)
-2. [Ejercicio 1B - Deadline](puntos/ej1_b.md)
-3. [Ejercicio 1C - Promedio y deadlines](puntos/ej1_c.md)
-4. [Ejercicio 2 - Tipos de API](puntos/ej2.md)
-5. [Ejercicio 3 - Transparencia](puntos/ej3.md)
-6. [Ejercico 4A - Sistema de archivos](puntos/ej4_a.md)
-7. [Ejercicio 4B - Concurrencia](puntos/ej4_b.md)
-8. [Ejercicio 5A - Tiempo de respuesta](puntos/ej5_a.md)
-9. [Ejercicio 5B - Sockets](puntos/ej5_b.md)
+1. [Ejercicio 1A - Errores de conectividad](docs/tp3/ej1_a.md)
+2. [Ejercicio 1B - Deadline](docs/tp3/ej1_b.md)
+3. [Ejercicio 1C - Promedio y deadlines](docs/tp3/ej1_c.md)
+4. [Ejercicio 2 - Tipos de API](docs/tp3/ej2.md)
+5. [Ejercicio 3 - Transparencia](docs/tp3/ej3.md)
+6. [Ejercico 4A - Sistema de archivos](docs/tp3/ej4_a.md)
+7. [Ejercicio 4B - Concurrencia](docs/tp3/ej4_b.md)
+8. [Ejercicio 5A - Tiempo de respuesta](docs/tp3/ej5_a.md)
+9. [Ejercicio 5B - Sockets](docs/tp3/ej5_b.md)
 
 
 ### Comparacion API REST vs gRPC
 
-En [este documento](puntos/comparacion.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST. 
+En [este documento](docs/comparacion/intro.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST. 
