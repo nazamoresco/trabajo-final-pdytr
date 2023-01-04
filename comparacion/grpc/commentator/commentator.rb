@@ -19,7 +19,7 @@ class Commentator
   end
 end
 
-class ComentaristaStreamer
+class CommentsStreamer
   MAX_BYTES = 4_194_308
   
   def initialize(match)
@@ -51,5 +51,5 @@ response = stub.list_matches Football::ListMatchesRequest.new
 my_match = response.matches.first
 
 stub.comment_match(
-  ComentaristaStreamer.new(my_match).each
+  CommentsStreamer.new(my_match).each
 )
