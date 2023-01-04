@@ -1,8 +1,7 @@
-require "net/http"
-require "json"
+require "http"
 
-uri = URI("http://localhost:4567/list-matches")
-response = Net::HTTP.get(uri)
-matches = JSON.parse(response)["matches"]
+response = HTTP.get("http://localhost:4567/list-matches").parse
+match = response["matches"][0]
 
-puts matches
+response = HTTP.get("http://localhost:4567/listen-match/#{match}")
+response.body.each { |x| puts x }

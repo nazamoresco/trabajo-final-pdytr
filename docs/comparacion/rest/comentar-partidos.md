@@ -47,3 +47,4 @@ put '/comment-match/:match_id', provides: "application/json" do
 end
 ```
 
+A continuación, [escuchar partidos](escuchar-partidos.md)

@@ -1,16 +1,9 @@
-# Universidad Nacional de La PLata
-
-## Licenciatura en Informática 
-
-### Programación distribuida y en tiempo real
-
-### gRPC con Ruby y Java
-
-### Nazareno Moresco
-
+# gRPC - Trabajo final
+### Nazareno Moresco - Licenciatura en Informática -  Universidad Nacional de La Plata
+&nbsp;
 ## Propuesta
- 
-Se propusó como un trabajo final sobre gRPC en Ruby, este consistira de dos partes. una traduccion del TP3 a Ruby y una comparacion entre REST y gRPC en Ruby, el objetivo sera comparar en performance una API implementada con ambas tecnicas asi como realizar un juicio de valor de los codigos resultantes.
+
+Se propusó un trabajo final sobre gRPC en Ruby, este consistira de dos partes. una traduccion del TP3 a Ruby y una comparacion entre REST y gRPC en Ruby, el objetivo sera comparar en performance una API implementada con ambas tecnicas asi como realizar un juicio de valor de los codigos resultantes.
 
 La entrega final incluirá:
 * Entrega del TP3
@@ -22,10 +15,6 @@ La entrega final incluirá:
     * Explicacion del codigo
     * Conclusiones
 
-Crear 3 clientes para el partido Argentina - Francia.
-1. Un Commentator que acceda a Argentina - Francia y comente el partido.
-2. Un Arbitro que acceda a Argentina - Francia y arbitre el partido.
-3. Un listener que acceda a Argentina - Francia y escuche el partido.
 
 ## Traduccion del TP3 a Ruby
 
@@ -34,6 +23,10 @@ Durante la cursada tuvimos un ejemplo base, como se propone resolver el tp en ot
 En este documento se explica como se llevo a cabo este ejemplo base.
 [Base](docs/tp3/base.md)
 
+### Como ejecutar un ejercicio?
+
+Todos los ejercicios se encuentra dockerizados, para ejecutar uno, solamente debemos dirijirnos a la carpeta y ejecutar `docker-compose up`.
+Se necesitara de instalar herramientas como `docker-compose` y `docker`.
 
 ###  Ejercicios
 
@@ -50,4 +43,4 @@ En este documento se explica como se llevo a cabo este ejemplo base.
 
 ### Comparacion API REST vs gRPC
 
-En [este documento](docs/comparacion/intro.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST. 
+En [este documento](docs/comparacion/intro.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST.

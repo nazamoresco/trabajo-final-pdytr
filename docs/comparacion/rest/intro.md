@@ -2,7 +2,7 @@
 
 Para implementar con REST en Ruby se eligio el framework Sinatra, si bien Rails es muy conocido es un exceso usarlo para este MVP. Sinatra es lo suficientemente minimalista para enfocarnos en la comunicacion y no en las especificidades de Rails.
 
-Para las comunicaciones con streaming, REST cuenta con streaming gracias a HTTP/1.1 y Sinatra provee de metodos para aprovecharlo.
+Se encontro varias guias que afirmaban que REST no soportaba los streams, pero esto no es cierto desde que existe HTTTP/1.1 que si soporta streams y Sinatra provee de metodos para aprovecharlo.
 ```ruby
 get '/stream', provides: 'text/event-stream' do
   stream :keep_open do |out|
