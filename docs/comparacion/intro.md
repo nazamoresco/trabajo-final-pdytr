@@ -37,4 +37,7 @@ Se requiren las siguientes interacciones con el servidor:
   * [Listar partidos](grpc/listar-partidos.md)
   * [Comentar partidos](grpc/comentar-partidos.md)
   * [Escuchar partidos](grpc/escuchar-partidos.md)
-
+* [Implementacion en REST][rest/intro.md]
+  * [Listar partidos](rest/listar-partidos.md)
+  * [Comentar partidos](rest/comentar-partidos.md)
+  * [Escuchar partidos](rest/escuchar-partidos.md)
