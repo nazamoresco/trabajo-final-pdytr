@@ -1,5 +1,7 @@
 ## La implementancion de gRPC
 
+El ejercicio se desarrolla en la carpeta `comparacion/grpc`.
+
 Se ha modificó la estructura de los archivos en el código respecto a los ejercicios anteriores. Se intenta plantear un ejemplo mas de produccion donde el cliente no deberia tener acceso a los archivos del server, como ocurre en previos ejercicios.
 
 Se decidío la siguiente estructura:

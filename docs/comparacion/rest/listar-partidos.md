@@ -5,7 +5,6 @@ Listar partidos en un GET Request común y corriente.
 El docker-compose se copió del de gRPC, se cambió el puerto expuesto ya que Sinatra corre en el puerto 4567 por default:
 
 ```yml
-# file comparacion/rest/docker-compose.yml
 version: "3"
 services:
   server:
@@ -36,7 +35,6 @@ services:
 El Dockerfile para el cliente tambien esta basado en el de gRPC, cambiando unicamente las gemas requeridas:
 
 ```Dockerfile
-# file comparacion/rest/Listener
 FROM ruby:3.0.0
 
 RUN mkdir /client
@@ -53,7 +51,6 @@ CMD ["ruby", "./listener/listener.rb"]
 
 IDEM para el servidor:
 ```Dockerfile
-# file comparacion/rest/Server
 FROM ruby:3.0.0
 
 RUN mkdir /server
@@ -74,7 +71,6 @@ El servidor mantiene la lógica para obtener los partidos.
 Observar como se define la ruta que debera ser consultada con una petición HTTP/1 GET.
 
 ```ruby
-# file comparacion/rest/server/server.rb
 require 'sinatra'
 
 get '/list-matches' do
@@ -86,7 +82,6 @@ end
 
 El cliente realiza esta consulta con ayuda de la gema `http`:
 ```ruby
-# file comparacion/rest/listener/listener.rb
 require "http"
 
 response = HTTP.get("http://localhost:4567/list-matches").parse

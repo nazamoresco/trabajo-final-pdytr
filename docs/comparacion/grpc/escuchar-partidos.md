@@ -4,8 +4,6 @@
 Para este endpoint, se necesitó de un endpoint con server streaming.
 Como se observa en la respuesta se incluirá si el partido ha finalizado.
 ```proto
-// file: comparacion/grpc/protos/football.proto
-
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
   rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
@@ -25,8 +23,6 @@ message ListenMatchResponse {
 
 El el listener se realizó una pequeña modificacion luego de listar los matches, selecciona el primero y hace un request para escucharlo.
 ```ruby
-# file: comparacion/grpc/protos/football.proto
-
 response = stub.list_matches Football::ListMatchesRequest.new
 my_match = response.matches.first
 

@@ -2,6 +2,7 @@
 5) Tiempos de respuesta de una invocación
 b) Utilizando los datos obtenidos en la Práctica 1 (Socket) realice un análisis de los tiempos y sus diferencias. Desarrollar una conclusión sobre los beneficios y complicaciones tiene una herramienta sobre la otra.
 ```
+El ejercicio se desarrolla en la carpeta `ej5_b`.
 
 No sería correcto comparar con los datos de la Práctica 1, ya que estos utilizan una plataforma Java. Por lo que se debió implementar un ejemplo sencillo y tomar los tiempos.
 

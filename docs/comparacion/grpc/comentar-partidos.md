@@ -4,8 +4,6 @@
 Para comentar partidos necesitaremos definir un endpoint de client-streaming. El cliente enviara el partido y los comentarios, del server no presisamos ninguna informacion.
 
 ```proto
-// file: comparacion/grpc/protos/football.proto
-
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
   rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
@@ -25,8 +23,6 @@ El server realiza las siguientes tareas:
 * Le envia al modulo `Referee` el comentario para que lo analice, y agrega una potencial sanción al archivo.
 
 ```ruby
-# file: comparacion/grpc/server/server.rb
-
 class Server < Football::Football::Service
   def comment_match(comment_reqs)
     referee = Referee.new
@@ -48,8 +44,6 @@ end
 
 El cliente define una clase para la logica del comentario, no es interesante si el enforque es en gRPC, pero devuelve un comentario en el metodo `comment`.
 ```ruby
-# file: comparacion/grpc/commentator/commentator.rb
-
 class Commentator
   ACTIONS = ["barre", "regatea", "define", "pasa"]
   DIRECTIONS = ["izquierda", "derecha"]
@@ -67,11 +61,9 @@ end
 
 Se define otra clase que consuma a `Commentator` y envie las peticiones al server.
 ```ruby
-# file: comparacion/grpc/commentator/comments_streamer.rb
-
 class CommentsStreamer
   MAX_BYTES = 4_194_308
-  
+
   def initialize(match)
     @match = match
     @commentator = Commentator.new(
@@ -95,8 +87,6 @@ end
 
 Y en el cliente se utiliza esta clase, ademas que se listan los matches anteriormente para identificar el partido:
 ```ruby
-# file: comparacion/grpc/commentator/client.rb
-
 stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
 
 response = stub.list_matches Football::ListMatchesRequest.new
@@ -118,8 +108,6 @@ El jugador de argentina pasa a la izquierda al defensor de argentina.
 
 Se define un dockerfile Commentator, estandard.
 ```Dockerfile
-# file: comparacion/grpc/Commentator
-
 FROM ruby:3.0.0
 
 RUN mkdir /client
@@ -143,8 +131,6 @@ CMD ["ruby", "./commentator/commentator.rb"]
 
 Se agregar el `commentator` al `docker-compose`:
 ```yml
-# file: comparacion/grpc/docker-compose
-
 version: "3"
 services:
   server:

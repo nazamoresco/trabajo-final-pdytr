@@ -1,5 +1,7 @@
 # Construccion del ejemplo base
 
+El ejercicio base se desarrolla en la carpeta `base`.
+
 Se utilizó [la guia de instalación](https://grpc.io/docs/languages/ruby/quickstart/) de gRPC para la construccion del ejemplo.
 
 Para el ejemplo base se eligió hacer un cliente y server de email.

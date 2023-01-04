@@ -7,6 +7,8 @@ c) Reducir el deadline de las llamadas gRPC a un 10% menos del promedio
 encontrado anteriormente. Mostrar y explicar el resultado para 10 llamadas.
 ```
 
+El ejercicio se desarrolla en la carpeta `ej1_c`.
+
 Primero se encontró el promedio de respuesta.
 
 Se agrego un codigo para simular trabajo:

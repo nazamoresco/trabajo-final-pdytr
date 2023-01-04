@@ -7,6 +7,8 @@
 
 a) Defina e implemente con gRPC un servidor. Documente todas las decisiones tomadas.
 ```
+El ejercicio se desarrolla en la carpeta `ej4_a`.
+
 
 ## Lectura
 

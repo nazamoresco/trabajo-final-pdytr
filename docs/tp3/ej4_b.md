@@ -9,6 +9,7 @@ b) Investigue si es posible que varias invocaciones remotas estén ejecutándos
 Nota: diseñe un experimento con el que se pueda demostrar fehacientementeque
 dos o más invocaciones remotas se ejecutan concurrentemente o no
 ```
+El ejercicio se desarrolla en la carpeta `ej4_b`.
 
 Es posible ya que por cada invocación del cliente el servidor creará un nuevo thread, y es apropiado siempre y cuando no se escriba sobre los mismos archivos. 
 

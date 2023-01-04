@@ -19,12 +19,15 @@ Cuando se corre el cliente sin un server disponible se obtiene el siguiente erro
 
 ## Error de conectividad #2: El servidor hace exit antes de responder:
 
+
+El ejercicio se desarrolla en la carpeta `ej1_a_2`.
+
 Para este error se mofiica el servidor (`emailer_server`) para recibir la peticion del cliente, pero terminar antes de enviarle una respuesta. 
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
     # Exit before answering.
-    exit 
+    exit
 
     Email::EmailReply.new(success: true, message: "Your email was store successfully")
   end
@@ -42,6 +45,7 @@ El servidor fall con el siguiente error:
 ``` 
 
 ## Error de conectividad #3: El servidor sufre una exepcion
+El ejercicio se desarrolla en la carpeta `ej1_a_3`.
 
 En este caso, el servidor no termina sino que falla por un error de codigo.
 ```ruby

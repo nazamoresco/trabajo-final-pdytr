@@ -3,6 +3,9 @@
 a) Diseñe un experimento que muestre el tiempo de respuesta mínimo de una invocación con gRPC. Muestre promedio y desviación estándar de tiempo respuesta.
 ```
 
+El ejercicio se desarrolla en la carpeta `ej5_a`.
+
+
 Se utilizo el codigo `base` por sus caracteristicas minimas para realizar el experimento.
 
 De 100 iteraciones se calcula el tiempo total, el promedio y desviación estándar.
