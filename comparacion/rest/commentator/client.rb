@@ -14,7 +14,7 @@ commentator = Commentator.new(
 begin
   http = HTTP.persistent "http://localhost:4567"
 
-  100.times { http.put("/comment-match/#{match}", json: { comment: commentator.comment }).flush }
+  100.times { http.put("/comment-match/#{match}", json: {comment: commentator.comment}).flush }
 ensure
-  http.close if http
+  http&.close
 end

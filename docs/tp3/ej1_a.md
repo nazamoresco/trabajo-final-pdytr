@@ -1,3 +1,5 @@
+# Ejercicio 1A
+
 ```
 1. Utilizando como base el programa ejemplo1 de gRPC:
 Mostrar experimentos donde se produzcan errores de conectividad del lado del
@@ -19,8 +21,7 @@ Cuando se corre el cliente sin un server disponible se obtiene el siguiente erro
 
 ## Error de conectividad #2: El servidor hace exit antes de responder:
 
-
-El ejercicio se desarrolla en la carpeta `ej1_a_2`.
+El ejercicio se desarrolló en la carpeta `ej1_a_2`.
 
 Para este error se mofiica el servidor (`emailer_server`) para recibir la peticion del cliente, pero terminar antes de enviarle una respuesta. 
 ```ruby
@@ -34,15 +35,15 @@ class EmailServer < Email::Emailer::Service
 end
 ```
 
-Se notifica el siguiente error en el cliente:
+Se notifica del siguiente error en el cliente:
 ```
 /usr/local/bundle/gems/grpc-1.50.0-x86_64-linux/src/ruby/lib/grpc/generic/active_call.rb:29:in `check_status': 1:CANCELLED. debug_error_string:{UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {created_time:"2022-12-22T00:05:11.851600505+00:00", grpc_status:1, grpc_message:"CANCELLED"}} (GRPC::Cancelled)
 ```
 
-El servidor fall con el siguiente error:
+El servidor falla con el siguiente error:
 ```
  E1222 00:05:11.852187204       1 completion_queue.cc:284]    assertion failed: completed_head.next == reinterpret_cast<uintptr_t>(&completed_head)
-``` 
+```
 
 ## Error de conectividad #3: El servidor sufre una exepcion
 El ejercicio se desarrolla en la carpeta `ej1_a_3`.
@@ -52,7 +53,7 @@ En este caso, el servidor no termina sino que falla por un error de codigo.
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
     # Exception before answering.
-    1/0 
+    1/0
 
     Email::EmailReply.new(success: true, message: "Your email was store successfully")
   end
@@ -65,3 +66,7 @@ Falla en el cliente con el siguiente error:
  ```
 
 Es interesante notar que en el servidor no existen logs del incidente.
+
+[Siguiente](ej1_b.md)
+
+[Volver](../../README.md)

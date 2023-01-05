@@ -1,12 +1,11 @@
-this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir.gsub(/listener/i, ""), 'lib')
+this_dir = __dir__
+lib_dir = File.join(this_dir.gsub(/listener/i, ""), "lib")
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
+require "grpc"
+require "football_services_pb"
 
-require 'grpc'
-require 'football_services_pb'
-
-stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
+stub = Football::Football::Stub.new("localhost:50051", :this_channel_is_insecure)
 
 response = stub.list_matches Football::ListMatchesRequest.new
 my_match = response.matches.first

@@ -1,4 +1,3 @@
-
 class MatchListener
   def initialize(match)
     @match = match
@@ -33,10 +32,6 @@ class MatchListener
       end
     end
 
-    real_time_match_listener.each do |aca|
-      aca
-    end
-
-    real_time_match_listener.each { |result| puts result; yield result }
+    real_time_match_listener.each { |result| yield result }
   end
 end

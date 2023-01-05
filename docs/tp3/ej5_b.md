@@ -1,12 +1,13 @@
+# Ejercicio 5B
 ```
 5) Tiempos de respuesta de una invocación
 b) Utilizando los datos obtenidos en la Práctica 1 (Socket) realice un análisis de los tiempos y sus diferencias. Desarrollar una conclusión sobre los beneficios y complicaciones tiene una herramienta sobre la otra.
 ```
-El ejercicio se desarrolla en la carpeta `ej5_b`.
+El ejercicio se desarrolló en la carpeta `ej5_b`.
 
-No sería correcto comparar con los datos de la Práctica 1, ya que estos utilizan una plataforma Java. Por lo que se debió implementar un ejemplo sencillo y tomar los tiempos.
+No sería correcto comparar con los datos de la Práctica 1 de la cursada ya que estos utilizan una plataforma Java. Por lo que se decidió implementar un ejemplo sencillo y tomar los tiempos.
 
-Para implementarlo, se decidió un protocolo de "palabra", el cliente enviara el titulo y cuerpo del email primero, y luego el servidor le enviara el booleano de exito y un mensaje, ya se puede oler el problema con esto.
+Para implementar el Socket se definió un "protocolo" de "palabra", el cliente evnai el titulo y cuerpo del email primero, y luego el servidor le evia el booleano de éxito y un mensaje.
 
 El servidor recibira 100 mensajes del cliente para sacar el promedio y luego cierra el socker:
 ```ruby
@@ -73,10 +74,11 @@ Average: 0.47 ms
 Standard deviation: 0.234 ms
 ```
 
-### Balance final
+## Balance final
 
-Se puede ver que el algoritmo que utiliza Sockets es más rápido que el de gRPC. 
+Se ve que el algoritmo que utiliza Sockets es más rápido que el de gRPC.
 Una explicación es que en gRPC las comunicaciones esperan una respuesta, son bidireccionales, a diferencia del uso de Sockets donde las comunicaciones pueden ser unilaterales, sin la necesidad de esperar una respuesta del otro par.
 
-El mayor beneficio que provee el uso de Sockets sobre el uso de gRPC es la velocidad. Sin embargo, gRPC resulta más atractivo en la implementación de algoritmos ya que permite abstraerse de mejor manera de las tecnicalidades de las comunicaciones, ademas que provee una estructura mas sólida *out of the box* a la hora de encarar un proyecto grande en comparación a sockets.
+El mayor beneficio que provee el uso de Sockets sobre el uso de gRPC es la velocidad, sin embargo, gRPC resulta más atractivo en la implementación de algoritmos mas complejos ya que permite abstraerse de mejor manera de las tecnicalidades de las comunicaciones, ademas que provee una estructura mas sólida *out of the box* a la hora de encarar un proyecto grande en comparación a sockets.
 
+[Volver](../../README.md)

@@ -1,5 +1,5 @@
-require 'socket'
-require 'benchmark'
+require "socket"
+require "benchmark"
 
 def request(server)
   server.puts "Title - My email title"
@@ -9,7 +9,7 @@ def request(server)
   server.gets # Message
 end
 
-server = TCPSocket.new 'localhost', 50051
+server = TCPSocket.new "localhost", 50051
 
 n = 100
 real_times = n.times.map do
@@ -20,7 +20,7 @@ server.close
 
 total_time = real_times.sum
 average = total_time / n
-standard_deviation = Math.sqrt(real_times.sum { |real_time| (real_time - average) ** 2} / (n - 1)) 
+standard_deviation = Math.sqrt(real_times.sum { |real_time| (real_time - average)**2 } / (n - 1))
 
 puts "Total time: #{total_time.round(3)} ms"
 puts "Average: #{average.round(3)} ms"

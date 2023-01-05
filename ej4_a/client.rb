@@ -1,12 +1,12 @@
-this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir, 'lib')
+this_dir = __dir__
+lib_dir = File.join(this_dir, "lib")
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
-require 'grpc'
-require 'file_service_services_pb'
+require "grpc"
+require "file_service_services_pb"
 require_relative "client/file_reader"
 
-hostname = 'localhost:50051'
+hostname = "localhost:50051"
 stub = FileService::FileTransferService::Stub.new(hostname, :this_channel_is_insecure)
 
 puts "Reading"

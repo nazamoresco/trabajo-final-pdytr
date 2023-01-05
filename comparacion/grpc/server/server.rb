@@ -1,9 +1,9 @@
-this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir.gsub(/\/server$/i, ""), 'lib')
+this_dir = __dir__
+lib_dir = File.join(this_dir.gsub(/\/server$/i, ""), "lib")
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
-require 'grpc'
-require 'football_services_pb'
+require "grpc"
+require "football_services_pb"
 
 class MatchListener
   def initialize(match)
@@ -12,7 +12,7 @@ class MatchListener
 
   def each
     return enum_for(:each) unless block_given?
-    
+
     real_time_match_listener = Enumerator.new do
       lines = File.open("matches/#{@match}", "r").each_line
       already_read_bytes = 0
@@ -20,7 +20,7 @@ class MatchListener
       loop do
         next_line = nil
         waits = 10
-        
+
         while next_line.nil?
           begin
             next_line = lines.next
@@ -35,7 +35,7 @@ class MatchListener
             raise if waits == 0
           end
         end
-        
+
         yield Football::ListenMatchResponse.new(
           event: next_line
         )
@@ -54,7 +54,6 @@ class Referee
   end
 end
 
-
 class Server < Football::Football::Service
   def list_matches(email_req, _unused_call)
     Football::ListMatchesResponse.new(
@@ -66,15 +65,15 @@ class Server < Football::Football::Service
     referee = Referee.new
 
     comment_reqs.each_remote_read do |comment_req|
-      file = File.open("matches/#{comment_req.match}", "a") 
-      file << "#{comment_req.comment}\n" 
+      file = File.open("matches/#{comment_req.match}", "a")
+      file << "#{comment_req.comment}\n"
 
       santion = referee.observe(comment_req.comment)
       file << "#{santion}\n" unless santion.nil?
-      
+
       file.close
     end
-    
+
     Football::CommentMatchResponse.new
   end
 
@@ -84,6 +83,6 @@ class Server < Football::Football::Service
 end
 
 server = GRPC::RpcServer.new
-server.add_http2_port('0.0.0.0:50051', :this_port_is_insecure)
+server.add_http2_port("0.0.0.0:50051", :this_port_is_insecure)
 server.handle(Server)
-server.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
+server.run_till_terminated_or_interrupted([1, "int", "SIGTERM"])

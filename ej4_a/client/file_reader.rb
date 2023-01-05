@@ -1,6 +1,6 @@
 class FileReader
   MAX_BYTES = 4_194_308
-  
+
   def initialize(file_name)
     @file_name = file_name
   end
@@ -17,9 +17,9 @@ class FileReader
     complete_chunks = total_bytes_to_read / max_bytes
     remaining_chunk_bytes = total_bytes_to_read % max_bytes
 
-    bytes_chunks = ([max_bytes] * complete_chunks) 
+    bytes_chunks = ([max_bytes] * complete_chunks)
     bytes_chunks << remaining_chunk_bytes if remaining_chunk_bytes != 0
-    
+
     bytes_chunks.each do |bytes_to_read|
       yield FileService::FileWriteRequest.new(
         fileName: @file_name,

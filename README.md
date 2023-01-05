@@ -1,31 +1,33 @@
 # gRPC - Trabajo final
 ### Nazareno Moresco - Licenciatura en Informática -  Universidad Nacional de La Plata
-&nbsp;
+
 ## Propuesta
 
-Se propusó un trabajo final sobre gRPC en Ruby, este consistira de dos partes. una traduccion del TP3 a Ruby y una comparacion entre REST y gRPC en Ruby, el objetivo sera comparar en performance una API implementada con ambas tecnicas asi como realizar un juicio de valor de los codigos resultantes.
+*"Se propone un trabajo final sobre gRPC en Ruby, este consistirá de dos partes. una traduccion del TP3 a Ruby y una comparacion entre REST y gRPC en Ruby, el objetivo será comparar en performance una API implementada con ambas tecnicas asi como realizar un juicio de valor de los codigos resultantes.*
 
-La entrega final incluirá:
-* Entrega del TP3
-* El codigo fuente de todas las implementaciones.
-* Un Dockerfile para instalar y ejecutar el codigo fuente.
-* Un manual de usuario para la instalacion y configuracion.
-* Documentacion de lo realizado:
-    * Justificacion de las desiciones
-    * Explicacion del codigo
-    * Conclusiones
+*La entrega final incluirá:*
+* *Entrega del TP3*
+* *El codigo fuente de todas las implementaciones.*
+* *Un Dockerfile para instalar y ejecutar el codigo fuente.*
+* *Un manual de usuario para la instalacion y configuracion.*
+* *Documentacion de lo realizado:*
+    * *Justificacion de las desiciones*
+    * *Explicacion del codigo*
+    * *Conclusiones*
+
+*"*
 
 
-## Traduccion del TP3 a Ruby
+## Traducción del TP3 a Ruby
 
-Durante la cursada tuvimos un ejemplo base, como se propone resolver el tp en otro lenguaje deberemos realizarlo nosotros mismos.
+Durante la cursada se contó con un ejemplo base, como se propone resolver el tp en otro lenguaje se deberá reimplementar.
 
 En este documento se explica como se llevo a cabo este ejemplo base.
 [Base](docs/tp3/base.md)
 
 ### Como ejecutar un ejercicio?
 
-Todos los ejercicios se encuentra dockerizados, para ejecutar uno, solamente debemos dirijirnos a la carpeta y ejecutar `docker-compose up`.
+Todos los ejercicios se encuentra dockerizados, para ejecutar uno simplemente debemos dirijirnos a la carpeta y ejecutar `docker-compose up`.
 Se necesitara de instalar herramientas como `docker-compose` y `docker`.
 
 ###  Ejercicios
@@ -43,4 +45,4 @@ Se necesitara de instalar herramientas como `docker-compose` y `docker`.
 
 ### Comparacion API REST vs gRPC
 
-En [este documento](docs/comparacion/intro.md) se encuentra una comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST.
+En [este documento](docs/comparacion/intro.md) se encuentra la comparación entre dos implementaciones del mismo sistema, uno en gRPC y el otro en REST.

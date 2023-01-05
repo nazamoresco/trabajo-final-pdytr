@@ -1,11 +1,11 @@
-this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir, 'lib')
+this_dir = __dir__
+lib_dir = File.join(this_dir, "lib")
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
-require 'grpc'
-require 'file_service_services_pb'
-require_relative 'server/file_reader'
-require_relative 'server/file_writer'
+require "grpc"
+require "file_service_services_pb"
+require_relative "server/file_reader"
+require_relative "server/file_writer"
 
 class FileServer < FileService::FileTransferService::Service
   MAX_BYTES = 4_194_304
@@ -20,6 +20,6 @@ class FileServer < FileService::FileTransferService::Service
 end
 
 server = GRPC::RpcServer.new
-server.add_http2_port('0.0.0.0:50051', :this_port_is_insecure)
+server.add_http2_port("0.0.0.0:50051", :this_port_is_insecure)
 server.handle(FileServer)
-server.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
+server.run_till_terminated_or_interrupted([1, "int", "SIGTERM"])

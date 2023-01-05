@@ -14,7 +14,7 @@ class FileWriter
           bytesQuantity: file_part.bytesQuantity
         )
       end
-    rescue StandardError => e
+    rescue => e
       fail e # signal completion via an error
     end
   end

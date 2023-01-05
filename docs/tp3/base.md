@@ -1,13 +1,15 @@
-# Construccion del ejemplo base
+# Construcción del ejemplo base
 
-El ejercicio base se desarrolla en la carpeta `base`.
+El ejercicio base se desarrolló en la carpeta `base`.
 
-Se utilizó [la guia de instalación](https://grpc.io/docs/languages/ruby/quickstart/) de gRPC para la construccion del ejemplo.
+Se utilizó [la guia de gRPC por Google](https://grpc.io/docs/languages/ruby/quickstart/) para la construcción del ejemplo.
 
-Para el ejemplo base se eligió hacer un cliente y server de email.
+Para el ejemplo base se eligió hacer un cliente y servidor de email.
 
-En el archivo `.proto` se definió una interacción basica donde el cliente envia un email al server, y este responde el exito de la operacion.
+En el archivo `.proto` se definió una interacción básica donde el cliente envia un email al servidor y este responde con el estado de éxito de la operación.
+
 En todos los lenguajes que ofrece gRPC estos `.protos` se definen de la misma manera.
+
 ```proto
 syntax = "proto3";
 
@@ -18,26 +20,23 @@ option objc_class_prefix = "E";
 
 package email;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
+service Emailer {
   rpc SendEmail (EmailRequest) returns (EmailReply) {}
 }
 
-// The request message containing the user's name.
 message EmailRequest {
   string title = 1;
   string body = 2;
 }
 
-// The response message containing the greetings
 message EmailReply {
-  string success = 1;
+  bool success = 1;
   string message = 2;
 }
-``` 
+```
 
-Luego se definió el cliente, por ahora simplemente enviara un email al puerto 50051 y esperara una respuesta.
+Luego se definió el cliente, por ahora simplemente envia un email al puerto 50051, default en gRPC, y espera una respuesta.
+
 ```ruby
 hostname = 'localhost:50051'
 stub = Email::Emailer::Stub.new(hostname, :this_channel_is_insecure)
@@ -47,8 +46,7 @@ email_response = stub.send_email(email)
 puts "The email was successful?: #{email_response.success}, message: #{email_response.message}"
 ```
 
-
-Se definió tambien el server que por ahora simplemente recivira el email y enviará una respuesta.
+Se definió tambien el servidor que por ahora simplemente recibe el email y envia una respuesta.
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
@@ -62,12 +60,12 @@ server.handle(EmailServer)
 server.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
 ```
 
-Para la creacion de los Dockerfiles tanto del server como del cliente se necesitó:
+Para la creacion de los Dockerfiles tanto del servidor como del cliente se necesitó:
 1. Generar y copiar el codigo correspondiente.
 2. Instalar las gemas de grpc (las gemas son paquetes en ruby).
 3. Correr el codigo correspondiente
 
-Se construyó el siguiente Dockerfile para el cliente: 
+Se construyó el siguiente Dockerfile para el cliente:
 ```dockerfile
 FROM ruby:3.0.0
 
@@ -78,16 +76,16 @@ RUN gem install grpc
 
 RUN chmod -R o-w /usr/local/bundle
 RUN apt update
-RUN apt install ruby-grpc-tools -y 
+RUN apt install ruby-grpc-tools -y
 
 COPY . /client
 
 RUN grpc_tools_ruby_protoc /client/protos/email.proto -I /client/protos --grpc_out=lib --ruby_out=lib
 
-CMD ["ruby", "./emailer_client.rb"] 
+CMD ["ruby", "./emailer_client.rb"]
 ```
 
-Se construyó el siguiente Dockerfile para el server (observar como ademas se expone el puerto): 
+Se construyó el siguiente Dockerfile para el server (observar como ademas se expone el puerto):
 ```ruby
 FROM ruby:3.0.0
 
@@ -100,7 +98,7 @@ RUN gem install byebug
 
 RUN chmod -R o-w /usr/local/bundle
 RUN apt update
-RUN apt install ruby-grpc-tools -y 
+RUN apt install ruby-grpc-tools -y
 
 COPY . /server
 
@@ -108,7 +106,7 @@ RUN grpc_tools_ruby_protoc ./protos/email.proto -I ./protos --grpc_out=lib --rub
 
 EXPOSE 50051
 
-CMD ["ruby", "./emailer_server.rb"] 
+CMD ["ruby", "./emailer_server.rb"]
 ```
 
 Finalmente, se definió un docker-compose que integra estos dos Dockerfiles:
@@ -142,3 +140,7 @@ Attaching to base_server, base_client
 client_1  | The email was successful?: true, message: Your email was store successfully
 base_client exited with code 0
 ```
+
+[Siguiente](ej1_a.md)
+
+[Volver](../../README.md)

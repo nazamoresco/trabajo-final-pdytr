@@ -1,3 +1,4 @@
+# Ejercicio 4A
 ```
 4)  Con la finalidad de contar con una versión muy restringida de un sistema de archivos remoto, en el cual se puedan llevar a cabo las operaciones enunciadas informalmente como
 
@@ -7,12 +8,12 @@
 
 a) Defina e implemente con gRPC un servidor. Documente todas las decisiones tomadas.
 ```
-El ejercicio se desarrolla en la carpeta `ej4_a`.
+El ejercicio se desarrolló en la carpeta `ej4_a`.
 
 
 ## Lectura
 
-Para la lectura, se decidió implementar un servicio Server Streaming GRPC, ya que de está forma el servidor puede enviarle el archivo particionado al cliente a través de un stream.
+Para la lectura, se decidió implementar un servicio Server Streaming GRPC ya que de esta forma el servidor puede enviarle el archivo particionado al cliente a través de un stream.
 
 Se definio el servicio de la siguiente forma:
 ```proto
@@ -53,7 +54,7 @@ end
 
 La clase `FileReader` se encarga de construir las distintas particiones leidas del archivo.
 
-En el metodo `each` se observa la logica para el leido: 
+En el metodo `each` de la clase `FileReader` se observa la logica para el leido:
 1. Se abre el archivo bajo la carpeta `/files` (para evitar leer archivos del codigo)
 2. Se mueve el puntero del archivo segun el offset.
 3. Se calcula la cantidad de bytes a leer y se calcula el tamaño de los distintos *chunks* resultantes.
@@ -73,11 +74,11 @@ class FileReader
     file.seek(@request.fileOffset)
 
     total_bytes_to_read = [file.size, @request.bytesQuantity].min
-    
+
     complete_chunks = total_bytes_to_read / @max_bytes
     remaining_chunk_bytes = total_bytes_to_read % @max_bytes
 
-    bytes_chunks = ([@max_bytes] * complete_chunks) 
+    bytes_chunks = ([@max_bytes] * complete_chunks)
     bytes_chunks << remaining_chunk_bytes if remaining_chunk_bytes != 0
 
     bytes_chunks.each do |bytes_to_read|
@@ -123,13 +124,13 @@ message FileWriteRequest {
   int32 bytesQuantity = 2;
   bytes contentBytes = 3;
 }
- 
+
 message FileWriteResponse {
   int32 bytesQuantity = 1;
 }
 ```
 
-En el cliente invocamos a una clase `FileReader` que se encargará construir las partes a enviar al servidor y un bloque que reacciona al stream del servidor. 
+En el cliente invocamos a una clase `FileReader` que se encargará construir las partes a enviar al servidor y un bloque que reacciona al stream del servidor.
 ```ruby
 stub.write(
   FileReader.new("image.jpg").each_item
@@ -142,7 +143,7 @@ El `FileReader` del cliente es similar al del servidor con la diferencia que se 
 ```ruby
 class FileReader
   MAX_BYTES = 4_194_308
-  
+
   def initialize(file_name)
     @file_name = file_name
   end
@@ -159,9 +160,9 @@ class FileReader
     complete_chunks = total_bytes_to_read / max_bytes
     remaining_chunk_bytes = total_bytes_to_read % max_bytes
 
-    bytes_chunks = ([max_bytes] * complete_chunks) 
+    bytes_chunks = ([max_bytes] * complete_chunks)
     bytes_chunks << remaining_chunk_bytes if remaining_chunk_bytes != 0
-    
+
     bytes_chunks.each do |bytes_to_read|
       yield FileService::FileWriteRequest.new(
         fileName: @file_name,
@@ -173,7 +174,6 @@ class FileReader
 end
 ```
 
-
 En el servidor se invoca a la clase `FileWriter` que se encarga de escribir el archivo enviado por el cliente.
 ```ruby
 def write(file_parts)
@@ -181,7 +181,7 @@ def write(file_parts)
 end
 ```
 
-`FileWriter` es sencillo por cada particion recibida, la escribe y devuelve al cliente los bytes escritos.
+`FileWriter` es sencillo, por cada particion recibida, la escribe y devuelve al cliente los bytes escritos.
 ```ruby
 class FileWriter
   def initialize(file_parts)
@@ -205,3 +205,7 @@ class FileWriter
   end
 end
 ```
+
+[Siguiente](ej4_b.md)
+
+[Volver](../../README.md)

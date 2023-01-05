@@ -1,3 +1,4 @@
+# Ejercicio 1C
 ```
 1. Utilizando como base el programa ejemplo1 de gRPC:
 Mostrar experimentos donde se produzcan errores de conectividad del lado del
@@ -7,11 +8,11 @@ c) Reducir el deadline de las llamadas gRPC a un 10% menos del promedio
 encontrado anteriormente. Mostrar y explicar el resultado para 10 llamadas.
 ```
 
-El ejercicio se desarrolla en la carpeta `ej1_c`.
+El ejercicio se desarrolló en la carpeta `ej1_c`.
 
-Primero se encontró el promedio de respuesta.
+Primero se necesitó de encontrar el promedio de respuesta.
 
-Se agrego un codigo para simular trabajo:
+Se agregó un código para simular trabajo:
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
@@ -40,9 +41,9 @@ puts "Average: #{(real_time/n).round(3)}segs"
 ```
 
 Se obtuvó el siguiente promedio:
-``` 
+```
 Average: 5,506segs
-``` 
+```
 
 Con este dato se creó un cliente con un deadline 10% menor que el promedio.
 ```ruby
@@ -76,4 +77,8 @@ client_1  | ERROR: 4:Deadline Exceeded. debug_error_string:{UNKNOWN:Deadline Exc
 
 Una conclusión posible  es que gRPC es estable en su tiempo de respuesta, por lo que el desvio de la media en el tiempo de respuesta es menor al 10% y es improbable que una request se termine antes de dicho tiempo.
 
-En parte estos resultados son causa de la relacion tiempo de procesamiento y tiempo de comunicacion, y que esto fue probado en un entorno local donde el tiempo de comunicacion es significativamente menor a un entorno de produccion, en distintos entornos de prueba los resultados pueden variar.
+En parte estos resultados son causa de la relacion tiempo de procesamiento y tiempo de comunicacion, y que esto fue probado en un entorno local donde el tiempo de comunicacion es significativamente menor al observable en un entorno de produccion. En distintos entornos de prueba los resultados pueden variar.
+
+[Siguiente](ej2.md)
+
+[Volver](../../README.md)
