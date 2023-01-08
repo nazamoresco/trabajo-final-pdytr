@@ -1,0 +1,25 @@
+version: "3"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Server
+    container_name: comparacion_rest_performance_server
+    ports:
+      - 4567:4567
+  commentator:
+    build:
+      context: .
+      dockerfile: Commentator
+    container_name: comparacion_rest_performance_comentarista
+    network_mode: host
+    depends_on:
+      - server
+  listener:
+    build:
+      context: .
+      dockerfile: Listener
+    container_name: comparacion_rest_performance_listener
+    network_mode: host
+    depends_on:
+      - commentator

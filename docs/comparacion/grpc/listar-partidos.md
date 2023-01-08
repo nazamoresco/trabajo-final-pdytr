@@ -1,8 +1,8 @@
 
 
-### Listar partidos
+# Listar partidos
 
-Se comenzó implementando la comunicación unaria. No es necesario que el cliente envie ningun dato en especial, pero el server devolvera una lista de strings.
+Se comenzó implementando la comunicación unaria. No es necesario que el cliente envie ningun dato en especial, pero el servidor devuelve una lista de strings.
 
 ```proto
 package football;
@@ -18,7 +18,7 @@ message ListMatchesResponse {
 }
 ```
 
-El server revisa la carpeta de matches, formatea los nombre de los archivos, los ordena y los envia al cliente.
+El servidor revisa la carpeta de partidos, formatea los nombre de los archivos, los ordena y los envia al cliente.
 
 ```ruby
 class Server < Football::Football::Service
@@ -28,7 +28,7 @@ class Server < Football::Football::Service
     )
   end
 end
-``` 
+```
 
 El `Dockerfile` es similar a anteriores, aunque capaz es interesante observar que la copia de los archivos es mas selectiva.
 ```Dockerfile
@@ -43,7 +43,7 @@ RUN gem install byebug
 
 RUN chmod -R o-w /usr/local/bundle
 RUN apt update
-RUN apt install ruby-grpc-tools -y 
+RUN apt install ruby-grpc-tools -y
 
 COPY server /server/server
 COPY matches /server/matches
@@ -54,7 +54,7 @@ RUN grpc_tools_ruby_protoc ./protos/football.proto -I ./protos --grpc_out=lib --
 
 EXPOSE 50051
 
-CMD ["ruby", "./server/server.rb"] 
+CMD ["ruby", "./server/server.rb"]
 ```
 
 Luego se debe crear el cliente para los Oyentes.
@@ -65,32 +65,9 @@ stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure
 response = stub.list_matches Football::ListMatchesRequest.new
 
 puts response.matches
-``` 
+```
 
-El Dockerfile tambien lo es.
-```Dockerfile
-FROM ruby:3.0.0
-
-RUN mkdir /client
-WORKDIR /client
-
-RUN gem install grpc
-
-RUN chmod -R o-w /usr/local/bundle
-RUN apt update
-RUN apt install ruby-grpc-tools -y 
-
-COPY listener /client/listener
-COPY matches /client/matches
-COPY lib /client/lib
-COPY protos /client/protos
-
-RUN grpc_tools_ruby_protoc /client/protos/football.proto -I /client/protos --grpc_out=lib --ruby_out=lib
-
-CMD ["ruby", "./listener/listener.rb"] 
-``` 
-
-Finalmente se definio el `docker-compose`, tambien bastante standard.
+Finalmente se definió el `docker-compose`, tambien bastante standard.
 ```yml
 version: "3"
 services:
@@ -107,7 +84,7 @@ services:
       dockerfile: listener
     container_name: comparacion_grpc_oyente
     network_mode: host
-    depends_on: 
+    depends_on:
       - server
 ```
 

@@ -1,6 +1,6 @@
-### Listar partidos
+# Listar partidos
 
-Listar partidos en un GET Request común y corriente.
+Listar partidos se puede resolver con un GET Request común y corriente.
 
 El docker-compose se copió del de gRPC, se cambió el puerto expuesto ya que Sinatra corre en el puerto 4567 por default:
 
@@ -68,12 +68,10 @@ CMD ["ruby", "./server/server.rb"]
 ```
 
 El servidor mantiene la lógica para obtener los partidos.
-Observar como se define la ruta que debera ser consultada con una petición HTTP/1 GET.
+Observar como se define la ruta que deberá ser consultada con una petición HTTP GET.
 
 ```ruby
-require 'sinatra'
-
-get '/list-matches' do
+get "/list-matches", provides: "application/json" do
   {
     matches: Dir["./matches/*"].map { |match| match.gsub(/\.\/matches\//i, "") }.sort
   }.to_json

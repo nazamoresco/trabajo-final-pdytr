@@ -1,0 +1,20 @@
+FROM ruby:3.0.0
+
+RUN mkdir /client
+WORKDIR /client
+
+RUN gem install grpc
+RUN gem install benchmark
+
+RUN chmod -R o-w /usr/local/bundle
+RUN apt update
+RUN apt install ruby-grpc-tools -y
+
+COPY commentator /client/commentator
+COPY matches /client/matches
+COPY lib /client/lib
+COPY protos /client/protos
+
+RUN grpc_tools_ruby_protoc /client/protos/football.proto -I /client/protos --grpc_out=lib --ruby_out=lib
+
+CMD ["ruby", "./commentator/commentator.rb"] 

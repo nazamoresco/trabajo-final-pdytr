@@ -1,8 +1,8 @@
 
-## Escuchar matches
+# Escuchar partidos
 
-Para este endpoint, se necesitó de un endpoint con server streaming.
-Como se observa en la respuesta se incluirá si el partido ha finalizado.
+Para este endpoint, se utilizó server streaming, el cliente envia el partido que quiere escuchar y el servidor streamea los eventos como strings.
+
 ```proto
 service Football {
   rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
@@ -17,11 +17,10 @@ message ListenMatchRequest {
 
 message ListenMatchResponse {
   string event = 1;
-  bool match_over = 2;
 }
 ```
 
-El el listener se realizó una pequeña modificacion luego de listar los matches, selecciona el primero y hace un request para escucharlo.
+El el listener se realizó una pequeña modificación luego de listar los partidos, se selecciona el primero y hace una petición para escucharlo.
 ```ruby
 response = stub.list_matches Football::ListMatchesRequest.new
 my_match = response.matches.first
@@ -34,7 +33,7 @@ call.each do |event_res|
 end
 ```
 
-En el server, se *stremea* desde la clase `MatchListener`
+En el servidor, se *stremea* desde la clase `MatchListener`
 ```ruby
 class Server < Football::Football::Service
   def listen_match(listen_req, _unused_call)
@@ -43,8 +42,9 @@ class Server < Football::Football::Service
 end
 ```
 
-La clase `MatchListener` accede al archivo correspondiente al partido y stremea los eventos en él al cliente.
-El enumerador que se contruyó es distintos a los de ejercicio anteriores, ya que no itera por datos, escucha a un archivo, por esta razon se explica en mayor detalle el metodo `each`.
+La clase `MatchListener` accede al archivo correspondiente del partido y stremea los eventos en él al cliente.
+El enumerador que se contruyó es distinto a los de ejercicio anteriores, ya que no itera por datos, escucha a un archivo, por esta razon se explica en mayor detalle el metodo `each` mas adelante.
+
 ```ruby
 class MatchListener
   def initialize(match)
@@ -53,7 +53,7 @@ class MatchListener
 
   def each
     return enum_for(:each) unless block_given?
-    
+
     real_time_match_listener = Enumerator.new do
       lines = File.open("matches/#{@match}", "r").each_line
       already_read_bytes = 0
@@ -61,7 +61,7 @@ class MatchListener
       loop do
         next_line = nil
         waits = 10
-        
+
         while next_line.nil?
           begin
             next_line = lines.next
@@ -76,7 +76,7 @@ class MatchListener
             raise if waits == 0
           end
         end
-        
+
         yield Football::ListenMatchResponse.new(
           event: next_line,
           match_over: false
@@ -94,17 +94,15 @@ class MatchListener
 end
 ```
 
-Normalmente un enumerador se ve asi en Ruby: 
+Normalmente un enumerador se ve asi en Ruby:
 ```ruby
 100.times
 datos.each
 file.each_line
 ```
 
-Estas formas tienen en comun que se evalua los datos a recorrer antes de crear el enumerador.
-El rango numerico debe ser evaluado, los datos contruidos y el archivo abierto.
-Pero en esto problema se necesita acceder a nuevos datos que puede aparecer una vez evaluado nuestro enumerador.
-Por esto se utilizó este metodo: 
+Estas formas tienen en común que se evalua los datos a recorrer antes de crear el enumerador. El rango numérico debe ser evaluado, los datos contruidos y el archivo abierto. Pero en esto problema se necesita acceder a nuevos datos que puede aparecer una vez evaluado nuestro enumerador.
+Por esto se utilizó este método:
 
 ```ruby
   real_time_match_listener = Enumerator.new do
@@ -116,9 +114,9 @@ Por esto se utilizó este metodo:
   end
 ```
 
-Lo que el lector debe enterder es que es una especie de enumerador "infinito", la lógica para cada nuevo elemento se encuentra en el bloque `loop` , cuenta con un estado definido en `inicializacion` y es posible finalizar la iteracion levantando una excepcion en `loop` (`StopIteration`).
+Se construye una especie de enumerador "infinito", la lógica para cada nuevo elemento se encuentra en el bloque `loop` , cuenta con un estado definido en `inicializacion` y es posible finalizar la iteracion levantando una excepcion en `loop` (`StopIteration`).
 
-En la inicializacion se abre el archivo por primera vez y se crea una variable para hacer un seguimientos de los bytes leidos.
+En la inicializaciín se abre el archivo por primera vez y se crea una variable para hacer un seguimientos de los bytes leidos.
 
 ```ruby
   real_time_match_listener = Enumerator.new do
@@ -136,8 +134,8 @@ Puntos a observar:
 * Si existen aun lineas para leer del archivos abierto, se lee y actualiza los bytes leidos.
 * Si no existen lineas para leer:
   * Se espera 1 segundo.
-  * Se abre nuevamente el archivo para acceder a nuevo contenido, pero se mueve el puntero del archivo a la ultima posicion leida.
-  * Se realizara 10 veces esta logica, en caso de no encontrar nuevo contenido, se considerá finalizado el partido.
+  * Se abre nuevamente el archivo para acceder al nuevo contenido, pero se mueve el puntero del archivo a la ultima posicion leida.
+  * Se realiza 10 veces esta lógica, en caso de no encontrar nuevo contenido, se considerá finalizado el partido.
 
 ```ruby
   real_time_match_listener = Enumerator.new do

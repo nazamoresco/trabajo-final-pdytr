@@ -1,0 +1,12 @@
+FROM ruby:3.0.0
+
+RUN mkdir /client
+WORKDIR /client
+
+RUN gem install http
+RUN gem install json
+
+COPY listener /client/listener
+COPY matches /client/matches
+
+CMD ["ruby", "./listener/listener.rb"] 

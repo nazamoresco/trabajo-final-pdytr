@@ -1,8 +1,11 @@
-### Escuchar partidos
+# Escuchar partidos
 
 El servidor streamea los contenidos de los partidos de forma similar a gRPC, esto es se devuelve un enumerador de Ruby que ira devolviendo resultados parciales.
+
 Notar el tipo de respuesta `text/event-stream`.
+
 `MatchListener` se mantiene igual con una pequeña modificacion, se devuelve un JSON en vez de una clase generada de gRPC.
+
 ```ruby
 get '/listen-match/:match_id', provides: 'text/event-stream' do
   MatchListener.new(params["match_id"])

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.football";
+option java_outer_classname = "FootballProto";
+option objc_class_prefix = "E";
+
+package football;
+
+service Football {
+  rpc ListMatches(ListMatchesRequest) returns (ListMatchesResponse) {}
+  rpc CommentMatch(stream CommentMatchRequest) returns (CommentMatchResponse) {}
+  rpc ListenMatch(ListenMatchRequest) returns (stream ListenMatchResponse) {}
+}
+
+// Listen Match
+message ListenMatchRequest {
+  string match = 1;
+}
+
+message ListenMatchResponse {
+  string event = 1;
+}
+
+// Comment match
+message CommentMatchRequest {
+  string match = 1;
+  string comment = 2;
+}
+
+message CommentMatchResponse {}
+
+// List matches
+message ListMatchesRequest {}
+
+message ListMatchesResponse {
+  repeated string matches = 2;
+}

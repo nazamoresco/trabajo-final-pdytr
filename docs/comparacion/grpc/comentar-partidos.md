@@ -1,7 +1,7 @@
 
-### Comentar partidos
+# Comentar partidos
 
-Para comentar partidos necesitaremos definir un endpoint de client-streaming. El cliente enviara el partido y los comentarios, del server no presisamos ninguna informacion.
+Para comentar partidos se necesitó definir un endpoint de client-streaming. El cliente envia el partido y los comentarios, del servidor no precisamos ninguna información.
 
 ```proto
 service Football {
@@ -18,9 +18,9 @@ message CommentMatchRequest {
 message CommentMatchResponse {}
 ```
 
-El server realiza las siguientes tareas:
+El servidor realiza las siguientes tareas:
 * Recibe los comentarios y los agrega al archivo correspondiente.
-* Le envia al modulo `Referee` el comentario para que lo analice, y agrega una potencial sanción al archivo.
+* Le envia al modulo `Referee` el comentario para que lo analice y devuelvas una potencial sanción al archivo.
 
 ```ruby
 class Server < Football::Football::Service
@@ -28,8 +28,8 @@ class Server < Football::Football::Service
     referee = Referee.new
 
     comment_reqs.each_remote_read do |comment_req|
-      file = File.open("matches/#{comment_req.match}", "a") 
-      file << "#{comment_req.comment}\n" 
+      file = File.open("matches/#{comment_req.match}", "a")
+      file << "#{comment_req.comment}\n"
 
       santion = referee.observe(comment_req.comment)
       file << "#{santion}\n" unless santion.nil?
@@ -54,12 +54,12 @@ class Commentator
   end
 
   def comment
-    "El jugador de #{@actors.sample} #{ACTIONS.sample} a la #{DIRECTIONS.sample} al #{ACTED.sample} de #{@actors.sample}." 
+    "El jugador de #{@actors.sample} #{ACTIONS.sample} a la #{DIRECTIONS.sample} al #{ACTED.sample} de #{@actors.sample}."
   end
 end
 ```
 
-Se define otra clase que consuma a `Commentator` y envie las peticiones al server.
+Se define otra clase que consuma a `Commentator` y envie las peticiones al servidor.
 ```ruby
 class CommentsStreamer
   MAX_BYTES = 4_194_308
@@ -85,7 +85,7 @@ class CommentsStreamer
 end
 ```
 
-Y en el cliente se utiliza esta clase, ademas que se listan los matches anteriormente para identificar el partido:
+Y en el cliente se utiliza esta clase, ademas que se listan los partidos anteriormente consultados para identificar el partido:
 ```ruby
 stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
 
@@ -97,7 +97,7 @@ stub.comment_match(
 )
 ```
 
-El archivo se ve asi luego de ejecutar el commentator: 
+El archivo se ve asi luego de ejecutar el commentator:
 ```
 El jugador de francia regatea a la derecha al delantero de argentina.
 El jugador de argentina pasa a la izquierda al delantero de argentina.
@@ -106,30 +106,7 @@ El jugador de francia barre a la izquierda al arco de argentina.
 El jugador de argentina pasa a la izquierda al defensor de argentina.
 ```
 
-Se define un dockerfile Commentator, estandard.
-```Dockerfile
-FROM ruby:3.0.0
-
-RUN mkdir /client
-WORKDIR /client
-
-RUN gem install grpc
-
-RUN chmod -R o-w /usr/local/bundle
-RUN apt update
-RUN apt install ruby-grpc-tools -y 
-
-COPY commentator /client/commentator
-COPY matches /client/matches
-COPY lib /client/lib
-COPY protos /client/protos
-
-RUN grpc_tools_ruby_protoc /client/protos/football.proto -I /client/protos --grpc_out=lib --ruby_out=lib
-
-CMD ["ruby", "./commentator/commentator.rb"] 
-```
-
-Se agregar el `commentator` al `docker-compose`:
+Se agregó el `commentator` al `docker-compose`:
 ```yml
 version: "3"
 services:
@@ -146,7 +123,7 @@ services:
       dockerfile: Commentator
     container_name: comparacion_grpc_comentarista
     network_mode: host
-    depends_on: 
+    depends_on:
       - server
   listener:
     build:
@@ -154,7 +131,7 @@ services:
       dockerfile: listener
     container_name: comparacion_grpc_oyente
     network_mode: host
-    depends_on: 
+    depends_on:
       - commentator
 ```
 
