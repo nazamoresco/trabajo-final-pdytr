@@ -60,12 +60,13 @@ server.handle(EmailServer)
 server.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
 ```
 
-Para la creación de los Dockerfiles tanto del servidor como del cliente se necesitó:
-1. Generar y copiar el código correspondiente.
-2. Instalar las gemas de grpc (las gemas son paquetes en ruby).
-3. Correr el código correspondiente
-
-Se construyó el siguiente Dockerfile para el cliente:
+Se construyó el siguiente Dockerfile para el cliente. A notar:
+* Parte de un imagen Docker para ruby.
+* Crea la carpeta `/client` como directorio de trabajo.
+* Se instala la gema gRPC y otras herramientas relacionadas.
+* Se copia el código al cliente.
+* Se genera el código Ruby correspondiente al `.proto`.
+* Se ejecuta como comando final el cliente.
 ```dockerfile
 FROM ruby:3.0.0
 
@@ -85,7 +86,15 @@ RUN grpc_tools_ruby_protoc /client/protos/email.proto -I /client/protos --grpc_o
 CMD ["ruby", "./emailer_client.rb"]
 ```
 
-Se construyó el siguiente Dockerfile para el server (observar como además se expone el puerto):
+Se construyó el siguiente Dockerfile para el servidor. A notar:
+* Parte de un imagen Docker para ruby.
+* Crea la carpeta `/server` como directorio de trabajo.
+* Se instala la gema gRPC y otras herramientas relacionadas.
+* Se instala la gema byebug para debuggear.
+* Se copia el código al directorio de trabajo.
+* Se genera el código Ruby correspondiente al `.proto`.
+* Se expone el puerto 50051, donde escucha el servidor.
+* Se ejecuta como comando final el servidor.
 ```ruby
 FROM ruby:3.0.0
 
