@@ -2,11 +2,11 @@
 
 El ejercicio base se desarrolló en la carpeta `base`.
 
-Se utilizó [la guia de gRPC por Google](https://grpc.io/docs/languages/ruby/quickstart/) para la construcción del ejemplo.
+Se utilizó [la guía de GRPC por Google](https://grpc.io/docs/languages/ruby/quickstart/) para la construcción del ejemplo.
 
 Para el ejemplo base se eligió hacer un cliente y servidor de email.
 
-En el archivo `.proto` se definió una interacción básica donde el cliente envia un email al servidor y este responde con el estado de éxito de la operación.
+En el archivo `.proto` se definió una interacción básica donde el cliente envía un email al servidor y este responde con el estado de éxito de la operación.
 
 En todos los lenguajes que ofrece gRPC estos `.protos` se definen de la misma manera.
 
@@ -35,7 +35,7 @@ message EmailReply {
 }
 ```
 
-Luego se definió el cliente, por ahora simplemente envia un email al puerto 50051, default en gRPC, y espera una respuesta.
+Luego se definió el cliente, por ahora simplemente envía un email al puerto 50051, default en GRPC, y espera una respuesta.
 
 ```ruby
 hostname = 'localhost:50051'
@@ -46,7 +46,7 @@ email_response = stub.send_email(email)
 puts "The email was successful?: #{email_response.success}, message: #{email_response.message}"
 ```
 
-Se definió tambien el servidor que por ahora simplemente recibe el email y envia una respuesta.
+Se definió también el servidor que por ahora simplemente recibe el email y envía una respuesta.
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
@@ -60,10 +60,10 @@ server.handle(EmailServer)
 server.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
 ```
 
-Para la creacion de los Dockerfiles tanto del servidor como del cliente se necesitó:
-1. Generar y copiar el codigo correspondiente.
+Para la creación de los Dockerfiles tanto del servidor como del cliente se necesitó:
+1. Generar y copiar el código correspondiente.
 2. Instalar las gemas de grpc (las gemas son paquetes en ruby).
-3. Correr el codigo correspondiente
+3. Correr el código correspondiente
 
 Se construyó el siguiente Dockerfile para el cliente:
 ```dockerfile
@@ -85,7 +85,7 @@ RUN grpc_tools_ruby_protoc /client/protos/email.proto -I /client/protos --grpc_o
 CMD ["ruby", "./emailer_client.rb"]
 ```
 
-Se construyó el siguiente Dockerfile para el server (observar como ademas se expone el puerto):
+Se construyó el siguiente Dockerfile para el server (observar como además se expone el puerto):
 ```ruby
 FROM ruby:3.0.0
 
@@ -144,3 +144,4 @@ base_client exited with code 0
 [Siguiente](ej1_a.md)
 
 [Volver](../../README.md)
+

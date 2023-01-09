@@ -1,16 +1,19 @@
-# La implementancion de gRPC
+# La implementación de gPC
 
 El ejercicio se desarrolla en la carpeta `comparacion/grpc`.
 
-Se modificó la estructura de los archivos en el código respecto a los ejercicios anteriores. Se intenta plantear un ejemplo mas de produccion donde el cliente no debería tener acceso a los archivos del server, como ocurre en previos ejercicios.
+Se modificó la estructura de los archivos en el código respecto a los ejercicios anteriores. Se intenta plantear un ejemplo más de producción donde el cliente no debería tener acceso a los archivos del servidor, como ocurre en previos ejercicios.
 
-Se decidío la siguiente estructura:
+Se decidió la siguiente estructura:
 ```
 |_ lib/ ~ archivos generados por grpc
-|_ listener/ ~ codigo del listener
+|_ listener/ ~ código del listener
 |_ matches/ ~ contiene los archivos de los matches
-|_ protos/ ~ contine los protos
-|_ server/ ~ contiene el codigo del server
+|_ protos/ ~ contiene los protos
+|_ server/ ~ contiene el código del server
 ```
 
-A continuacion, [implementacion de listar partidos](listar-partidos.md)
+[Siguiente](listar-partidos.md)
+
+[Volver](../intro.md)
+

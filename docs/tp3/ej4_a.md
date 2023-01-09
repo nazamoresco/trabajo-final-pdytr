@@ -13,9 +13,9 @@ El ejercicio se desarrolló en la carpeta `ej4_a`.
 
 ## Lectura
 
-Para la lectura, se decidió implementar un servicio Server Streaming GRPC ya que de esta forma el servidor puede enviarle el archivo particionado al cliente a través de un stream.
+Para la lectura, se decidió implementar un servicio Server Streaming GRPC ya que de esta forma el servidor puede enviar el archivo particionado al cliente a través de un stream.
 
-Se definio el servicio de la siguiente forma:
+Se definió el servicio de la siguiente forma:
 ```proto
 message FileReadRequest {
   string fileName = 1;
@@ -34,9 +34,9 @@ service FileTransferService {
 }
 ```
 
-A continuacion como se construyo el server:
+A continuación cómo se construyó el server:
 
-Primero se obtuvó que el limite para la comunicaciones son 4.194.308 bytes para ruby.
+Primero se obtuvo que el límite para la comunicaciones son 4.194.308 bytes para ruby.
 ```
 {UNKNOWN:Error received from peer localhost:50051 {created_time:"2022-12-24T18:06:36.556774716+00:00", grpc_status:8, grpc_message:"Received message larger than max (500000008 vs. 4194304)"}}
 ```
@@ -52,13 +52,13 @@ class FileServer < FileService::FileTransferService::Service
 end
 ```
 
-La clase `FileReader` se encarga de construir las distintas particiones leidas del archivo.
+La clase `FileReader` se encarga de construir las distintas particiones leídas del archivo.
 
-En el metodo `each` de la clase `FileReader` se observa la logica para el leido:
-1. Se abre el archivo bajo la carpeta `/files` (para evitar leer archivos del codigo)
-2. Se mueve el puntero del archivo segun el offset.
+En el método `each` de la clase `FileReader` se observa la lógica para el leído:
+1. Se abre el archivo bajo la carpeta `/files` (para evitar leer archivos del código)
+2. Se mueve el puntero del archivo según el offset.
 3. Se calcula la cantidad de bytes a leer y se calcula el tamaño de los distintos *chunks* resultantes.
-4. A medida que se lee las particiones se retornan al cliente con la instruccion `yield`
+4. A medida que se lee las particiones se retornan al cliente con la instrucción `yield`
 ```ruby
 class FileReader
   # @param [Area] area
@@ -91,7 +91,7 @@ class FileReader
 end
 ```
 
-El codigo en el cliente es mas sencillo:
+El código en el cliente es más sencillo:
 
 Se puede observar como se hace el request, luego se abre un archivo copia y por cada resultado se añade al archivo.
 El resultado es una copia directa del archivo del servidor.
@@ -130,7 +130,7 @@ message FileWriteResponse {
 }
 ```
 
-En el cliente invocamos a una clase `FileReader` que se encargará construir las partes a enviar al servidor y un bloque que reacciona al stream del servidor.
+En el cliente invocamos a una clase `FileReader` que se encargará de construir las partes a enviar al servidor y un bloque que reacciona al stream del servidor.
 ```ruby
 stub.write(
   FileReader.new("image.jpg").each_item
@@ -139,7 +139,7 @@ stub.write(
 end
 ```
 
-El `FileReader` del cliente es similar al del servidor con la diferencia que se envian del cliente al servidor y no del servidor al cliente, y que se tiene que tener en cuenta los caracteres del nombre del archivo para el calculo del maximo de bytes para la comunicacion.
+El `FileReader` del cliente es similar al del servidor con la diferencia que se envían del cliente al servidor y no del servidor al cliente, y que se tiene que tener en cuenta los caracteres del nombre del archivo para el cálculo del máximo de bytes para la comunicación.
 ```ruby
 class FileReader
   MAX_BYTES = 4_194_308
@@ -181,7 +181,7 @@ def write(file_parts)
 end
 ```
 
-`FileWriter` es sencillo, por cada particion recibida, la escribe y devuelve al cliente los bytes escritos.
+`FileWriter` es sencillo, por cada partición recibida, la escribe y devuelve al cliente los bytes escritos.
 ```ruby
 class FileWriter
   def initialize(file_parts)
@@ -209,3 +209,4 @@ end
 [Siguiente](ej4_b.md)
 
 [Volver](../../README.md)
+

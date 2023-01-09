@@ -1,8 +1,6 @@
-
-
 # Listar partidos
 
-Se comenzó implementando la comunicación unaria. No es necesario que el cliente envie ningun dato en especial, pero el servidor devuelve una lista de strings.
+Se comenzó a implementar la comunicación unaria. No es necesario que el cliente envíe ningún dato en especial, pero el servidor devuelve una lista de strings.
 
 ```proto
 package football;
@@ -18,7 +16,7 @@ message ListMatchesResponse {
 }
 ```
 
-El servidor revisa la carpeta de partidos, formatea los nombre de los archivos, los ordena y los envia al cliente.
+El servidor revisa la carpeta de partidos, formatea los nombre de los archivos, los ordena y los envía al cliente.
 
 ```ruby
 class Server < Football::Football::Service
@@ -30,7 +28,7 @@ class Server < Football::Football::Service
 end
 ```
 
-El `Dockerfile` es similar a anteriores, aunque capaz es interesante observar que la copia de los archivos es mas selectiva.
+El `Dockerfile` es similar a los anteriores, aunque es interesante observar que la copia de los archivos es más selectiva.
 ```Dockerfile
 FROM ruby:3.0.0
 
@@ -58,7 +56,7 @@ CMD ["ruby", "./server/server.rb"]
 ```
 
 Luego se debe crear el cliente para los Oyentes.
-El cliente es similar a clientes anteriores.
+El cliente es similar a los clientes anteriores.
 
 ```ruby
 stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
@@ -67,7 +65,7 @@ response = stub.list_matches Football::ListMatchesRequest.new
 puts response.matches
 ```
 
-Finalmente se definió el `docker-compose`, tambien bastante standard.
+Finalmente se definió el `docker-compose`, también bastante estándar.
 ```yml
 version: "3"
 services:
@@ -89,4 +87,7 @@ services:
 ```
 
 
-A continuación [comentar partidos](comentar-partidos.md).
+[Siguiente](comentar-partidos.md)
+
+[Volver](../intro.md)
+

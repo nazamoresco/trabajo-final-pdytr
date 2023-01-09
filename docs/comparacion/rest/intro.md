@@ -2,11 +2,11 @@
 
 El ejercicio se desarrolla en la carpeta `comparacion/rest`.
 
-Para implementar con REST en Ruby se eligió el framework Sinatra, si bien Rails es muy completo es un exceso usarlo para este MVP. Sinatra es lo suficientemente minimalista para enfocarnos en la comunicacion y no en las especificidades de Rails.
+Para implementar con REST en Ruby se eligió el framework Sinatra, si bien Rails es muy completo es un exceso usarlo para este MVP. Sinatra es lo suficientemente minimalista para enfocarnos en la comunicación y no en las especificidades de Rails.
 
-Durante la investigación, se encontró varias guias que afirmaban que REST no soportaba los streams, pero esto no es cierto desde que existe HTTTP/1.1 que si soporta streams y Sinatra provee de metodos para aprovecharlo.
+Durante la investigación, se encontró varias guías que afirmaban que REST no soportaba los streams, pero esto no es cierto desde que existe HTTP/1.1 que si soporta streams y Sinatra provee de métodos para aprovecharlo.
 
-Para esto, se define un endpoint en el servidor asi:
+Para esto, se define un endpoint en el servidor así:
 ```ruby
 get '/stream', provides: 'text/event-stream' do
   stream :keep_open do |out|
@@ -19,7 +19,7 @@ get '/stream', provides: 'text/event-stream' do
 end
 ```
 
-Y un cliente asi:
+Y un cliente así:
 ```ruby
 Net::HTTP.start 'localhost', 4567 do |http|
   request = Net::HTTP::Get.new "/stream"
@@ -31,7 +31,7 @@ Net::HTTP.start 'localhost', 4567 do |http|
 end
 ```
 
-Si se observa la captura de Wireshark, se puede apreciar como existe un unico TCP handshake, por lo tanto se persiste la conexión.
+Si se observa la captura de Wireshark, se puede apreciar como existe un único TCP handshake, por lo tanto se persiste la conexión.
 ```ruby
 15	2.935232	::1	::1	TCP	76	52448 → 4567 [SYN] Seq=0 Win=65535 Len=0 MSS=65475 WS=256 SACK_PERM
 16	2.935269	::1	::1	TCP	76	4567 → 52448 [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 MSS=65475 WS=256 SACK_PERM
@@ -46,4 +46,8 @@ Si se observa la captura de Wireshark, se puede apreciar como existe un unico TC
 33	3.939270	::1	::1	TCP	64	52448 → 4567 [ACK] Seq=4543 Ack=166 Win=2160384 Len=0
 ```
 
-A continuacion, [implementacion de listar partidos](listar-partidos.md)
+[Siguiente](listar-partidos.md)
+
+[Volver](../intro.md)
+
+

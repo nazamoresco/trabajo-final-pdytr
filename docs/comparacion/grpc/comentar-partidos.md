@@ -1,7 +1,7 @@
 
 # Comentar partidos
 
-Para comentar partidos se necesitó definir un endpoint de client-streaming. El cliente envia el partido y los comentarios, del servidor no precisamos ninguna información.
+Para comentar partidos se necesitó definir un endpoint de client-streaming. El cliente envía el partido y los comentarios, del servidor no precisamos ninguna información.
 
 ```proto
 service Football {
@@ -20,7 +20,7 @@ message CommentMatchResponse {}
 
 El servidor realiza las siguientes tareas:
 * Recibe los comentarios y los agrega al archivo correspondiente.
-* Le envia al modulo `Referee` el comentario para que lo analice y devuelvas una potencial sanción al archivo.
+* Le envía al módulo `Referee` el comentario para que lo analice y devuelvas una potencial sanción al archivo.
 
 ```ruby
 class Server < Football::Football::Service
@@ -42,7 +42,7 @@ class Server < Football::Football::Service
 end
 ```
 
-El cliente define una clase para la logica del comentario, no es interesante si el enforque es en gRPC, pero devuelve un comentario en el metodo `comment`.
+El cliente define una clase para la lógica del comentario, no es interesante si el enfoque es en gRPC, pero devuelve un comentario en el método `comment`.
 ```ruby
 class Commentator
   ACTIONS = ["barre", "regatea", "define", "pasa"]
@@ -59,7 +59,7 @@ class Commentator
 end
 ```
 
-Se define otra clase que consuma a `Commentator` y envie las peticiones al servidor.
+Se define otra clase que consuma a `Commentator` y envíe las peticiones al servidor.
 ```ruby
 class CommentsStreamer
   MAX_BYTES = 4_194_308
@@ -85,7 +85,7 @@ class CommentsStreamer
 end
 ```
 
-Y en el cliente se utiliza esta clase, ademas que se listan los partidos anteriormente consultados para identificar el partido:
+Y en el cliente se utiliza esta clase, además que se listan los partidos anteriormente consultados para identificar el partido:
 ```ruby
 stub = Football::Football::Stub.new('localhost:50051', :this_channel_is_insecure)
 
@@ -97,13 +97,13 @@ stub.comment_match(
 )
 ```
 
-El archivo se ve asi luego de ejecutar el commentator:
+El archivo se ve así luego de ejecutar el commentator:
 ```
-El jugador de francia regatea a la derecha al delantero de argentina.
+El jugador de Francia regatea a la derecha al delantero de Argentina.
 El jugador de argentina pasa a la izquierda al delantero de argentina.
-El jugador de argentina regatea a la derecha al delantero de francia.
-El jugador de francia barre a la izquierda al arco de argentina.
-El jugador de argentina pasa a la izquierda al defensor de argentina.
+El jugador de Argentina regatea a la derecha al delantero de Francia.
+El jugador de Francia barre a la izquierda al arco de Argentina.
+El jugador de Argentina pasa a la izquierda al defensor de Argentina.
 ```
 
 Se agregó el `commentator` al `docker-compose`:
@@ -135,5 +135,8 @@ services:
       - commentator
 ```
 
-A continuación [escuchar partidos](escuchar-partidos.md).
+[Siguiente](escuchar-partidos.md)
+
+[Volver](../intro.md)
+
 

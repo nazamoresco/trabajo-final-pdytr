@@ -32,7 +32,7 @@ services:
       - commentator
 ```
 
-El Dockerfile para el cliente tambien esta basado en el de gRPC, cambiando unicamente las gemas requeridas:
+El Dockerfile para el cliente también está basado en el de gRPC, cambiando únicamente las gemas requeridas:
 
 ```Dockerfile
 FROM ruby:3.0.0
@@ -68,7 +68,7 @@ CMD ["ruby", "./server/server.rb"]
 ```
 
 El servidor mantiene la lógica para obtener los partidos.
-Observar como se define la ruta que deberá ser consultada con una petición HTTP GET.
+Observar cómo se define la ruta que deberá ser consultada con una petición HTTP GET.
 
 ```ruby
 get "/list-matches", provides: "application/json" do
@@ -86,4 +86,7 @@ response = HTTP.get("http://localhost:4567/list-matches").parse
 match = response["matches"][0]
 ```
 
-A continuación [comentar partidos](comentar-partidos.md).
+[Siguiente](comentar-partidos.md)
+
+[Volver](../intro.md)
+

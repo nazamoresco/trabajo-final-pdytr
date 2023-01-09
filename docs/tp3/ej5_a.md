@@ -6,7 +6,7 @@ a) Diseñe un experimento que muestre el tiempo de respuesta mínimo de una invo
 
 El ejercicio se desarrolló en la carpeta `ej5_a`.
 
-Se utilizó el codigo `base` por sus caracteristicas minimas para realizar el experimento.
+Se utilizó el código `base` por sus características mínimas para realizar el experimento.
 
 De 100 iteraciones de comunicación se calcula el tiempo total, el promedio y desviación estándar.
 
@@ -35,3 +35,4 @@ Standard deviation: 0.234 ms
 [Siguiente](ej5_b.md)
 
 [Volver](../../README.md)
+

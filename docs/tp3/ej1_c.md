@@ -10,7 +10,7 @@ encontrado anteriormente. Mostrar y explicar el resultado para 10 llamadas.
 
 El ejercicio se desarrolló en la carpeta `ej1_c`.
 
-Primero se necesitó de encontrar el promedio de respuesta.
+Primero se necesitó encontrar el promedio de respuesta.
 
 Se agregó un código para simular trabajo:
 ```ruby
@@ -23,7 +23,7 @@ class EmailServer < Email::Emailer::Service
 end
 ```
 
-Luego se hizo 100 llamadas y se calculó el promedio.
+Luego se hicieron 100 llamadas y se calculó el promedio.
 ```ruby
 def request
   hostname = 'localhost:50051'
@@ -75,10 +75,11 @@ client_1  | ERROR: 4:Deadline Exceeded. debug_error_string:{UNKNOWN:Deadline Exc
 client_1  | ERROR: 4:Deadline Exceeded. debug_error_string:{UNKNOWN:Deadline Exceeded {grpc_status:4, created_time:"2022-12-22T02:34:58.311474507+00:00"}}
 ```
 
-Una conclusión posible  es que gRPC es estable en su tiempo de respuesta, por lo que el desvio de la media en el tiempo de respuesta es menor al 10% y es improbable que una request se termine antes de dicho tiempo.
+Una conclusión posible  es que gRPC es estable en su tiempo de respuesta, por lo que el desvío de la media en el tiempo de respuesta es menor al 10% y es improbable que una request se termine antes de dicho tiempo.
 
-En parte estos resultados son causa de la relacion tiempo de procesamiento y tiempo de comunicacion, y que esto fue probado en un entorno local donde el tiempo de comunicacion es significativamente menor al observable en un entorno de produccion. En distintos entornos de prueba los resultados pueden variar.
+En parte estos resultados son causa de la relación tiempo de procesamiento y tiempo de comunicación, y que esto fue probado en un entorno local donde el tiempo de comunicación es significativamente menor al observable en un entorno de producción. En distintos entornos de prueba los resultados pueden variar.
 
 [Siguiente](ej2.md)
 
 [Volver](../../README.md)
+

@@ -18,9 +18,9 @@ Para demostrar esto se llevará a cabo un experimento.
 Se ejecutarán en simultáneo dos clientes que imprimen en un archivo la oración "Hola, soy #{@id}! Este es mi saludo nro #{idx}.\n" múltiples veces.
 Si el contenido del archivo posee mensajes intercalados de los distintos clientes podremos asegurar que se ejecutan concurrentemente, en caso contrario no será asegurable.
 
-Para implementar el experimiento se modificó el ejercicio anterior de la siguiente forma:
+Para implementar el experimento se modificó el ejercicio anterior de la siguiente forma:
 
-En el cliente se llama a la clase IdSender que envia el mensaje mencionado:
+En el cliente se llama a la clase IdSender que envía el mensaje mencionado:
 ```ruby
 stub.write(
   IdSender.new(Random.rand(100)).each_item
@@ -29,7 +29,7 @@ stub.write(
 end
 ```
 
-En este archivo se observa como `IdSender` envia 100 saludos al servidor para ser escritos.
+En este archivo se observa como `IdSender` envía 100 saludos al servidor para ser escritos.
 ```ruby
 class IdSender
   MAX_BYTES = 4_194_308
@@ -54,9 +54,9 @@ class IdSender
 end
 ```
 
-En el servidor no son necesario ningun cambio.
+En el servidor no es necesario ningún cambio.
 
-Se modifó el docker-compose para levantar dos cliente en vez de uno.
+Se modificó el docker-compose para levantar dos clientes en vez de uno.
 
 ```yml
 version: "3"
@@ -88,7 +88,7 @@ services:
 
 Una vez ejecutado el docker-compose con los clientes finalizados el servidor seguirá corriendo, se usó el comando `docker exec -it ej4_b_server bash` para abrir una terminal en el container del servidor.
 
-En este se observó el comienzo del archivo `files/file.txt` donde se confirma la ejecucion concurrente.
+En este se observó el comienzo del archivo `files/file.txt` donde se confirma la ejecución concurrente.
 ```bash
 root@4885b6733ff0:/server# head files/file.txt
 Hola, soy 69! Este es mi saludo nro 24.
@@ -108,6 +108,7 @@ Ese es un problema clásico de exclusión mutua.
 Para resolverlo se podría tener un diccionario con variables lock para cada archivo, cuando un hilo quiera escribir sobre un archivo bloqueara está variable y la desbloqueara cuando termine.
 Sería necesario también implementar la exclusión mutua para acceder a estas estructuras.
 
-[Siguiente](ej4_a.md)
+[Siguiente](ej5_a.md)
 
 [Volver](../../README.md)
+

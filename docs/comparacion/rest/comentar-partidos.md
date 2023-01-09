@@ -2,8 +2,8 @@
 
 Para comentar partidos, se implementó un client streaming.
 
-Para ello en el cliente, se crea una conexión persistente HTTP 1.1 keep-alive con el metodo `persistent`.
-Una vez realizado el handshake de TCP, se streamea los comentarios de la clase `Commentator` (permanece sin modificacion de su implementacion en gRPC).
+Para ello en el cliente, se crea una conexión persistente HTTP 1.1 keep-alive con el método `persistent`.
+Una vez realizado el handshake de TCP, se streamea los comentarios de la clase `Commentator` (permanece sin modificación de su implementación en GRPC).
 
 ```ruby
 require "json"
@@ -28,8 +28,8 @@ ensure
 end
 ```
 
-En el servidor se define un nuevo endpoint con la acción definida como PUT ya que modifica lo logs del partido.
-La lógica interior es identica a la de gRPC, simplemente se trabaja con json en vez de utilizar las clases proveidas por gRPC.
+En el servidor se define un nuevo endpoint con la acción definida como PUT ya que modifica los logs del partido.
+La lógica interior es idéntica a la de gRPC, simplemente se trabaja con json en vez de utilizar las clases proveídas por gRPC.
 ```ruby
 put '/comment-match/:match_id', provides: "application/json" do
   match = params["match_id"]
@@ -47,4 +47,7 @@ put '/comment-match/:match_id', provides: "application/json" do
 end
 ```
 
-A continuación, [escuchar partidos](escuchar-partidos.md)
+[Siguiente](escuchar-partidos.md)
+
+[Volver](../intro.md)
+

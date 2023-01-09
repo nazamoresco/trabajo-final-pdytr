@@ -10,7 +10,7 @@ forma tal que no se reciban comunicaciones o no haya receptor para las
 comunicaciones.
 ```
 
-A countinuacion se listaran los distintos errores de conectividad encontrados:
+A continuación se listaran los distintos errores de conectividad encontrados:
 
 ## Error de conectividad #1: El servidor no está corriendo en esa dirección
 
@@ -23,7 +23,7 @@ Cuando se corre el cliente sin un server disponible se obtiene el siguiente erro
 
 El ejercicio se desarrolló en la carpeta `ej1_a_2`.
 
-Para este error se mofiica el servidor (`emailer_server`) para recibir la peticion del cliente, pero terminar antes de enviarle una respuesta. 
+Para este error se modifica el servidor (`emailer_server`) para recibir la petición del cliente, pero termina antes de enviarle una respuesta. 
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
@@ -45,10 +45,10 @@ El servidor falla con el siguiente error:
  E1222 00:05:11.852187204       1 completion_queue.cc:284]    assertion failed: completed_head.next == reinterpret_cast<uintptr_t>(&completed_head)
 ```
 
-## Error de conectividad #3: El servidor sufre una exepcion
+## Error de conectividad #3: El servidor sufre una excepción
 El ejercicio se desarrolla en la carpeta `ej1_a_3`.
 
-En este caso, el servidor no termina sino que falla por un error de codigo.
+En este caso, el servidor no termina sino que falla por un error de código.
 ```ruby
 class EmailServer < Email::Emailer::Service
   def send_email(email_req, _unused_call)
@@ -70,3 +70,4 @@ Es interesante notar que en el servidor no existen logs del incidente.
 [Siguiente](ej1_b.md)
 
 [Volver](../../README.md)
+
